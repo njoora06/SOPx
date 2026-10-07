@@ -1,0 +1,42 @@
+// SOPX Tech — database schema
+// Connection URL lives in prisma.config.ts (Prisma 7+).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EnquiryType {
+  CONTACT
+  CONSULTATION
+}
+
+enum EnquiryStatus {
+  NEW
+  IN_PROGRESS
+  CLOSED
+}
+
+/// Submissions from the contact and consultation forms.
+model Enquiry {
+  id        String        @id @default(cuid())
+  type      EnquiryType   @default(CONTACT)
+  status    EnquiryStatus @default(NEW)
+  name      String
+  email     String
+  company   String?
+  phone     String?
+  service   String?
+  budget    String?
+  timeline  String?
+  message   String        @db.Text
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([type, status])
+  @@index([createdAt])
+}

@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SOPX Tech — Website
 
-## Getting Started
+Next.js 16 (App Router, Cache Components) · TypeScript (strict) · Tailwind CSS v4 · shadcn/ui · Framer Motion · React Hook Form + Zod · Prisma 7 + PostgreSQL · Resend.
 
-First, run the development server:
+## Getting started
 
 ```bash
+cp .env.example .env   # fill in values
+npm install            # also runs `prisma generate`
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Dev server |
+| `npm run build` | Generate Prisma client + production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | Route type generation + `tsc` |
+| `npm run db:migrate` | Create/apply a Prisma migration (needs `DATABASE_URL`) |
+| `npm run db:studio` | Browse the database |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Design
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Design system: **Obsidian Kinetic** (DESIGN.md). All tokens live in `src/app/globals.css`:
 
-## Learn More
+- Colours: `bg-obsidian-0/1/2`, `bg-void`, `text-vermilion`, `text-silver`, `border-carbon`, `border-slate-border`, plus the generated palette (`bg-surface-container`, …)
+- Type: `text-display-hero`, `text-headline-lg/md/sm`, `text-title-md`, `text-body-lg/md/sm`, `text-code-badge`, `text-label-caps`, `tabular`
+- Layout: `layout-grid` (4 / 8 / 12 columns), spacing `p-space-md`, `gap-gutter`, …
+- Elevation: `layer-0` … `layer-3`, `edge-light`, `shadow-glow-*`
+- Components (`src/components/ui`): Button, Badge, Input, Checkbox, RadioGroup, Card, Terminal
 
-To learn more about Next.js, take a look at the following resources:
+## Conventions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Server Components by default; `"use client"` only for interactivity (nav state, forms, motion).
+- Content lives in `src/data/*` and is typed in `src/types` so it can later move to a CMS or the database.
+- Form schemas in `src/lib/validations.ts` are shared by the client and the Server Actions in `src/actions`.
+- `src/components/ui` is shadcn/ui-owned; add components with `npx shadcn@latest add <name>`.

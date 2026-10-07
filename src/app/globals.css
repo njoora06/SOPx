@@ -1,26 +1,531 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Design system: "Obsidian Kinetic" — source of truth is DESIGN.md.
+ * Components only use the Tailwind utilities generated from these tokens.
+ */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Brand palette (DESIGN.md › Colors) ───────────────────────────── */
+  --vermilion: #ef4444;        /* Primary accent — Precision Vermilion */
+  --crimson: #dc2626;          /* Tertiary accent — Deep Crimson */
+  --silver: #94a3b8;           /* Secondary accent — High-Contrast Silver */
+  --obsidian-0: #0a0b0e;       /* Ground Zero canvas */
+  --obsidian-1: #0f1117;       /* Layer 1 — modular paneling */
+  --obsidian-2: #161922;       /* Layer 2 — interactive cards & drawers */
+  --void: #07080b;             /* Telemetry / log terminal surface */
+  --carbon: #1f2430;           /* Hairline border */
+  --slate-border: #2a303c;     /* Muted / interactive border */
+  --slate: #64748b;            /* Placeholder copy */
+  --white: #ffffff;
+  --snow: #f8fafc;
+  --telemetry-normal: #22c55e; /* "green for normal telemetry" — exact hex not specified */
+
+  /* ── Generated palette (DESIGN.md front matter) ───────────────────── */
+  --surface: #111319;
+  --surface-dim: #111319;
+  --surface-bright: #373940;
+  --surface-container-lowest: #0c0e14;
+  --surface-container-low: #191b22;
+  --surface-container: #1e1f26;
+  --surface-container-high: #282a30;
+  --surface-container-highest: #33343b;
+  --on-surface: #e2e2eb;
+  --on-surface-variant: #e4beba;
+  --inverse-surface: #e2e2eb;
+  --inverse-on-surface: #2e3037;
+  --outline: #ab8986;
+  --outline-variant: #5b403e;
+  --surface-tint: #ffb3ad;
+  --md-primary: #ffb3ad;
+  --on-primary: #68000a;
+  --primary-container: #ff5451;
+  --on-primary-container: #5c0008;
+  --inverse-primary: #b91a24;
+  --md-secondary: #b9c8de;
+  --on-secondary: #233143;
+  --secondary-container: #39485a;
+  --on-secondary-container: #a7b6cc;
+  --tertiary: #ffb4ab;
+  --on-tertiary: #690005;
+  --tertiary-container: #ff544a;
+  --on-tertiary-container: #5c0004;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --primary-fixed: #ffdad7;
+  --primary-fixed-dim: #ffb3ad;
+  --on-primary-fixed: #410004;
+  --on-primary-fixed-variant: #930013;
+  --secondary-fixed: #d4e4fa;
+  --secondary-fixed-dim: #b9c8de;
+  --on-secondary-fixed: #0d1c2d;
+  --on-secondary-fixed-variant: #39485a;
+  --tertiary-fixed: #ffdad6;
+  --tertiary-fixed-dim: #ffb4ab;
+  --on-tertiary-fixed: #410002;
+  --on-tertiary-fixed-variant: #93000b;
+  --on-background: #e2e2eb;
+  --surface-variant: #33343b;
+
+  /* ── Semantic roles (shadcn/ui contract) ──────────────────────────── */
+  --background: var(--obsidian-0);
+  --foreground: var(--snow);
+  --card: var(--obsidian-1);
+  --card-foreground: var(--snow);
+  --popover: var(--obsidian-2);
+  --popover-foreground: var(--snow);
+  --primary: var(--vermilion);
+  --primary-foreground: var(--white);
+  --secondary: var(--obsidian-2);
+  --secondary-foreground: var(--snow);
+  --muted: var(--obsidian-2);
+  --muted-foreground: var(--silver);
+  --accent: rgb(255 255 255 / 0.04);
+  --accent-foreground: var(--white);
+  --destructive: var(--vermilion);
+  --border: var(--carbon);
+  --input: var(--carbon);
+  --ring: var(--vermilion);
 }
 
 @theme inline {
+  /* Colours → bg-*, text-*, border-* */
+  --color-vermilion: var(--vermilion);
+  --color-crimson: var(--crimson);
+  --color-silver: var(--silver);
+  --color-obsidian-0: var(--obsidian-0);
+  --color-obsidian-1: var(--obsidian-1);
+  --color-obsidian-2: var(--obsidian-2);
+  --color-void: var(--void);
+  --color-carbon: var(--carbon);
+  --color-slate-border: var(--slate-border);
+  --color-slate: var(--slate);
+  --color-snow: var(--snow);
+  --color-telemetry-normal: var(--telemetry-normal);
+
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface-tint: var(--surface-tint);
+  --color-md-primary: var(--md-primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-inverse-primary: var(--inverse-primary);
+  --color-md-secondary: var(--md-secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed: var(--on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
+  --color-on-secondary-fixed-variant: var(--on-secondary-fixed-variant);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
+  --color-on-background: var(--on-background);
+  --color-surface-variant: var(--surface-variant);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Typefaces (DESIGN.md › Typography) — loaded by next/font in app/layout.tsx */
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Shapes (DESIGN.md › rounded): rounded-sm, rounded, rounded-md, rounded-lg, rounded-xl */
+  --radius-sm: 0.125rem;
+  --radius: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  /* Spacing (DESIGN.md › spacing) → p-space-md, gap-gutter, px-margin… */
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-sm: 1rem;
+  --spacing-gutter-lg: 2rem;
+  --spacing-margin: 2rem;
+  --spacing-margin-mobile: 1rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+
+  /* Elevation glows (DESIGN.md › Elevation & Depth, Components) */
+  --shadow-glow-hover: 0 0 20px -4px rgb(239 68 68 / 0.18);
+  --shadow-glow-primary: 0 0 16px rgb(239 68 68 / 0.35);
+  --shadow-glow-focus: 0 0 0 1px #ef4444, 0 0 12px rgb(239 68 68 / 0.2);
+
+  /* Homepage motion (from the page design) */
+  --animate-pulse-slow: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6.5s ease-in-out infinite;
+  --animate-scan-line: scan-line 5s linear infinite;
+  --animate-spin-slow: orbit 28s linear infinite;
+  --animate-spin-reverse: spin-reverse 22s linear infinite;
+  --animate-mesh-1: mesh-1 18s ease-in-out infinite;
+  --animate-mesh-2: mesh-2 22s ease-in-out infinite;
+  --animate-mesh-3: mesh-3 16s ease-in-out infinite;
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.97); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(-7px) scale(1.005); }
+    50% { transform: translateY(7px) scale(0.995); }
+  }
+  @keyframes scan-line {
+    0% { top: 0%; opacity: 0; }
+    15% { opacity: 0.85; }
+    85% { opacity: 0.85; }
+    100% { top: 100%; opacity: 0; }
+  }
+  @keyframes orbit {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes spin-reverse {
+    to { transform: rotate(-360deg); }
+  }
+  @keyframes mesh-1 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(60px, -45px) scale(1.15) rotate(15deg); }
+    66% { transform: translate(-50px, 35px) scale(0.9) rotate(-10deg); }
+  }
+  @keyframes mesh-2 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(-70px, 40px) scale(1.2) rotate(-20deg); }
+    66% { transform: translate(45px, -30px) scale(0.85) rotate(12deg); }
+  }
+  @keyframes mesh-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -50px) scale(1.25); }
+  }
+
+  /* Live-state badge dot pulse */
+  --animate-status-pulse: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  @keyframes status-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--vermilion); }
+    50% { opacity: 0.45; box-shadow: 0 0 2px var(--vermilion); }
+  }
+
+  /* Contact section HQ map (from the consultation page design) */
+  --animate-radar-sweep: orbit 7s linear infinite;
+  --animate-ping-radar: ping-radar 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  @keyframes ping-radar {
+    0% { transform: scale(0.95); opacity: 0.9; }
+    50%, 100% { transform: scale(2.2); opacity: 0; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Typography scale (DESIGN.md › typography) ───────────────────────
+ * Display/headline sizes switch from their -mobile variant at 768px. */
+@utility text-display-hero {
+  font-family: var(--font-display);
+  font-size: 2.25rem; line-height: 2.75rem; font-weight: 700; letter-spacing: -0.02em;
+  @media (width >= 48rem) { font-size: 3.5rem; line-height: 4rem; letter-spacing: -0.03em; }
+}
+@utility text-headline-lg {
+  font-family: var(--font-display);
+  font-size: 1.75rem; line-height: 2.25rem; font-weight: 600; letter-spacing: -0.02em;
+  @media (width >= 48rem) { font-size: 2.5rem; line-height: 3rem; letter-spacing: -0.025em; }
+}
+@utility text-headline-md {
+  font-family: var(--font-display);
+  font-size: 1.75rem; line-height: 2.25rem; font-weight: 600; letter-spacing: -0.02em;
+}
+@utility text-headline-sm {
+  font-family: var(--font-display);
+  font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; letter-spacing: -0.015em;
+}
+@utility text-title-md {
+  font-family: var(--font-sans);
+  font-size: 1rem; line-height: 1.5rem; font-weight: 600; letter-spacing: -0.01em;
+}
+@utility text-body-lg {
+  font-family: var(--font-sans);
+  font-size: 1.125rem; line-height: 1.75rem; font-weight: 400; letter-spacing: -0.01em;
+}
+@utility text-body-md {
+  font-family: var(--font-sans);
+  font-size: 0.875rem; line-height: 1.375rem; font-weight: 400; letter-spacing: 0;
+}
+@utility text-body-sm {
+  font-family: var(--font-sans);
+  font-size: 0.75rem; line-height: 1.125rem; font-weight: 400; letter-spacing: 0.01em;
+}
+@utility text-code-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem; line-height: 1rem; font-weight: 500; letter-spacing: 0.06em;
+}
+@utility text-label-caps {
+  font-family: var(--font-sans);
+  font-size: 0.625rem; line-height: 0.875rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* Tabular figures for metrics, uptime, throughput and latency counters. */
+@utility tabular {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Layout grid (DESIGN.md › Layout & Spacing) ──────────────────────
+ * Mobile <768px:      4 cols, 1rem margin, 1rem gutter
+ * Tablet 768–1279px:  8 cols, 1.5rem margin, 1.5rem gutter
+ * Desktop 1280px+:   12 cols, 2.5rem margin, 2rem gutter */
+@utility layout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 1rem;
+  padding-inline: 1rem;
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 80rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 2rem;
+    padding-inline: 2.5rem;
+  }
+}
+
+/* ── Elevation layers (DESIGN.md › Elevation & Depth) ────────────────── */
+@utility layer-0 {
+  background-color: var(--obsidian-0);
+}
+@utility layer-1 {
+  background-color: var(--obsidian-1);
+  border: 1px solid var(--carbon);
+}
+@utility layer-2 {
+  background-color: var(--obsidian-2);
+  border: 1px solid var(--slate-border);
+  transition: border-color 200ms, box-shadow 200ms;
+  &:hover {
+    border-color: rgb(239 68 68 / 0.4);
+    box-shadow: 0 0 20px -4px rgb(239 68 68 / 0.18);
+  }
+}
+@utility layer-3 {
+  position: relative;
+  background-color: rgb(22 25 34 / 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--slate-border);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px -1px auto;
+    height: 1px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--vermilion), transparent);
+  }
+}
+/* Directional highlight sheen for high-priority items. */
+@utility edge-light {
+  background-image: linear-gradient(135deg, rgb(239 68 68 / 0.25) 0%, rgb(255 255 255 / 0.03) 40%, transparent 100%);
+}
+
+/* Faint architectural grid backdrop. */
+@utility grid-backdrop {
+  background-size: 44px 44px;
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.028) 1px, transparent 1px);
+}
+/* Dot-matrix coordinate overlay. */
+@utility dot-matrix {
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+/* Radar-style map backdrop: vermilion dots over a faint grid. */
+@utility tactical-grid {
+  background-size: 24px 24px;
+  background-image:
+    radial-gradient(circle, rgb(239 68 68 / 0.15) 1px, transparent 1px),
+    linear-gradient(to right, rgb(255 255 255 / 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.02) 1px, transparent 1px);
+}
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* ── Motion system ────────────────────────────────────────────────────
+ * One easing/timing vocabulary for every entrance, scroll and page change.
+ * Mirrored for JS in src/lib/motion.ts. */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); /* entrances */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* scrolling, exits */
+  --dur-reveal: 900ms;
+  --dur-page-in: 450ms;
+  --dur-page-out: 200ms;
+  --stagger: 80ms;
+}
+
+/* Scroll reveal (components/animations/reveal.tsx). Hidden only once JS has
+   flagged <html class="js">, so content is visible without JavaScript. */
+.js [data-reveal] {
+  transition:
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    transform var(--dur-reveal) var(--ease-out-expo);
+  transition-delay: calc(var(--reveal-step, 0) * var(--stagger));
+}
+.js [data-reveal]:not([data-visible]) {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+}
+.js [data-reveal="scale"]:not([data-visible]) {
+  transform: translate3d(0, 16px, 0) scale(0.97);
+}
+.js [data-reveal="fade"]:not([data-visible]) {
+  transform: none;
+}
+/* Repeating scroll fade (components/animations/scroll-fade.tsx): soft and slow. */
+.js [data-scroll-fade] {
+  transition:
+    opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.js [data-scroll-fade][data-ready]:not([data-inview]) {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+}
+
+/* Hero entrance: pure CSS so it plays on first paint, before hydration.
+   `backwards` fill hands control back to parallax/tilt transforms after. */
+@keyframes enter-up {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+}
+@keyframes enter-scale {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.97); }
+}
+.hero-enter {
+  animation: enter-up var(--dur-reveal) var(--ease-out-expo) backwards;
+  animation-delay: calc(var(--enter-step, 0) * var(--stagger) + 60ms);
+}
+.hero-enter-visual {
+  animation: enter-scale 1000ms var(--ease-out-expo) 150ms backwards;
+}
+
+/* Page transitions (components/animations/page-transition.tsx). */
+@keyframes page-out {
+  to { opacity: 0; transform: translate3d(0, -8px, 0); }
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+}
+::view-transition-old(.page-exit) {
+  animation: page-out var(--dur-page-out) var(--ease-in-out) both;
+}
+::view-transition-new(.page-enter) {
+  animation: page-in var(--dur-page-in) var(--ease-out-expo) both;
+}
+/* Only the page content animates: no whole-document crossfade. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+/* The fixed header stays perfectly still across navigations. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+/* Clicks during a transition reach the live page. */
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Content is simply present; nothing slides or scales. */
+  .js [data-reveal]:not([data-visible]) {
+    opacity: 1;
+    transform: none;
+  }
+  .js [data-scroll-fade][data-ready]:not([data-inview]) {
+    transform: none;
+  }
+  /* Page changes become a short, motionless crossfade. */
+  @keyframes page-out {
+    to { opacity: 0; }
+  }
+  @keyframes page-in {
+    from { opacity: 0; }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-body-md text-foreground antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-white;
+  }
+  /* No CSS smooth scrolling: SectionLink animates section jumps itself. */
+  html {
+    scrollbar-color: var(--carbon) var(--obsidian-0);
+  }
+  ::selection {
+    background: rgb(239 68 68 / 0.3);
+    color: var(--white);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
