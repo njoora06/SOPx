@@ -13,10 +13,10 @@ function AccentLine() {
   return <div aria-hidden className="absolute inset-x-0 top-0 h-[2.5px] bg-linear-to-r from-transparent via-vermilion to-transparent" />;
 }
 
-/** Stylised vector map of the Padrauna HQ area with a radar sweep. */
+/** Stylised vector map of the Padrauna HQ area with a radar sweep. Stays dark in both themes. */
 function HqMap() {
   return (
-    <div className="relative h-[260px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#07090e]">
+    <div data-theme="dark" className="relative h-[260px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#07090e]">
       <div aria-hidden className="tactical-grid pointer-events-none absolute inset-0 opacity-60" />
       <svg aria-hidden className="pointer-events-none absolute inset-0 size-full opacity-40" preserveAspectRatio="none" viewBox="0 0 460 260">
         <path d="M -20,180 Q 90,140 180,210 T 360,190 T 480,240" fill="none" stroke="#2563eb" strokeDasharray="2 3" strokeWidth="2" />
@@ -113,10 +113,10 @@ export function ContactSection() {
             </div>
           </Reveal>
           <Reveal index={1}>
-            <h2 className="text-3xl leading-[1.15] font-extrabold tracking-tight sm:text-5xl">
+            <h1 className="text-3xl leading-[1.15] font-extrabold tracking-tight sm:text-5xl">
               {contactIntro.titleStart} <br className="hidden sm:inline" />
               <span className="bg-linear-to-r from-red-400 via-rose-200 to-indigo-300 bg-clip-text text-transparent">{contactIntro.titleHighlight}</span>
-            </h2>
+            </h1>
           </Reveal>
           <Reveal index={2}>
             <p className="mx-auto max-w-2xl text-sm leading-relaxed text-silver sm:text-base">{contactIntro.description}</p>
@@ -188,7 +188,7 @@ export function ContactSection() {
                       href={phone.href}
                       title="Call directly"
                       aria-label={`Call ${phone.display}`}
-                      className="flex shrink-0 items-center justify-center rounded-lg border border-white/8 bg-white/4 p-2 text-slate-400 transition-all outline-none hover:bg-vermilion hover:text-white focus-visible:shadow-glow-focus"
+                      className="flex shrink-0 items-center justify-center rounded-lg border border-white/8 bg-white/4 p-2 text-slate-400 transition-all outline-none hover:bg-vermilion hover:text-primary-foreground focus-visible:shadow-glow-focus"
                     >
                       <Phone className="size-4" aria-hidden />
                     </a>

@@ -18,7 +18,7 @@ export function AboutSection() {
               <Eyebrow>{about.eyebrow}</Eyebrow>
             </Reveal>
             <Reveal index={1}>
-              <h2 className="text-headline-lg">{about.title}</h2>
+              <h1 className="text-headline-lg">{about.title}</h1>
             </Reveal>
             <Reveal index={2} variant="fade">
               <div aria-hidden className="h-1 w-16 rounded-full bg-linear-to-r from-vermilion to-silver" />

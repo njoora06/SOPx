@@ -40,7 +40,7 @@ const pill =
 export function Hero() {
   return (
     <section className={cn(heroFonts, "grid-backdrop relative w-full overflow-hidden pt-12 pb-24 md:pt-20 md:pb-32")}>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-[#08090d]/60 to-[#08090d]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-[#08090d]/60 to-[#08090d] light:via-obsidian-0/60 light:to-obsidian-0" />
       <div className="relative mx-auto max-w-[1440px] px-6 sm:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
           {/* Left column: positioning and accents */}
@@ -65,22 +65,22 @@ export function Hero() {
               <Highlight tone="red">{hero.highlightB}</Highlight>, {hero.titleEnd}
             </h1>
 
-            <p style={{ "--enter-step": 2 } as React.CSSProperties} className="hero-enter max-w-xl text-base leading-relaxed font-normal text-[#94a3b8] sm:text-lg">{company.description}</p>
+            <p style={{ "--enter-step": 2 } as React.CSSProperties} className="hero-enter max-w-xl text-base leading-relaxed font-normal text-silver sm:text-lg">{company.description}</p>
 
             <div style={{ "--enter-step": 3 } as React.CSSProperties} className="hero-enter flex flex-wrap items-center gap-4 pt-2">
               <SectionLink
                 href={CONSULTATION_HREF}
-                className="group relative inline-flex transform items-center gap-2.5 rounded-xl border border-white/10 bg-linear-to-r from-[#f50c0c] via-[#e30b0b] to-[#c70909] px-7 py-3.5 text-sm font-semibold tracking-wide text-white shadow-[0_0_30px_rgba(245,12,12,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_46px_rgba(245,12,12,0.65)]"
+                className="group relative inline-flex transform items-center gap-2.5 rounded-xl border border-primary-foreground/10 bg-linear-to-r from-[#f50c0c] via-[#e30b0b] to-[#c70909] px-7 py-3.5 text-sm font-semibold tracking-wide text-primary-foreground shadow-[0_0_30px_rgba(245,12,12,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_46px_rgba(245,12,12,0.65)] light:shadow-[0_10px_28px_-10px_rgba(220,38,38,0.6)] light:hover:shadow-[0_16px_36px_-12px_rgba(220,38,38,0.7)]"
               >
                 <span>Get a Consultation</span>
                 <ArrowRight aria-hidden className="size-4.5 transition-transform group-hover:translate-x-1" />
               </SectionLink>
               <SectionLink
                 href={`#${SECTIONS.services}`}
-                className="inline-flex transform items-center gap-2 rounded-xl border border-white/9 bg-[#0f141f]/70 px-6 py-3.5 text-sm font-medium tracking-wide text-slate-200 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-[#151c2c] hover:text-white"
+                className="inline-flex transform items-center gap-2 rounded-xl border border-white/9 bg-[#0f141f]/70 px-6 py-3.5 text-sm font-medium tracking-wide text-slate-200 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-[#151c2c] hover:text-white light:bg-obsidian-1/80 light:hover:bg-obsidian-1 light:hover:shadow-md"
               >
                 <span>Explore Services</span>
-                <ChevronDown aria-hidden className="size-4.5 text-[#94a3b8]" />
+                <ChevronDown aria-hidden className="size-4.5 text-silver" />
               </SectionLink>
             </div>
 
@@ -90,12 +90,12 @@ export function Hero() {
                 return (
                   <TiltCard
                     key={metric.label}
-                    className="transform overflow-hidden rounded-xl border border-white/6 bg-[#0e121a]/70 p-3.5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1"
+                    className="transform overflow-hidden rounded-xl border border-white/6 bg-[#0e121a]/70 p-3.5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 light:bg-obsidian-1/80 light:shadow-sm light:hover:shadow-md"
                   >
                     {tone && (
                       <div aria-hidden className={cn("pointer-events-none absolute top-0 right-0 size-12 rounded-bl-full", tone.corner)} />
                     )}
-                    <dt className="mb-1 font-mono text-[10px] tracking-widest text-[#64748b] uppercase">{metric.label}</dt>
+                    <dt className="mb-1 font-mono text-[10px] tracking-widest text-slate uppercase">{metric.label}</dt>
                     <dd className={cn("text-sm font-semibold tracking-tight sm:text-base", tone ? tone.text : "text-white")}>
                       {metric.value}
                     </dd>
@@ -109,9 +109,9 @@ export function Hero() {
           {/* Right column: interactive 3D neural AI brain and telemetry HUD */}
           <div className="hero-enter-visual lg:col-span-6">
             <ScrollFade className="relative">
-              <div aria-hidden className="absolute -inset-1 rounded-3xl bg-linear-to-tr from-[#0b2fa3]/35 via-transparent to-[#f50c0c]/30 opacity-75 blur-2xl" />
+              <div aria-hidden className="absolute -inset-1 rounded-3xl bg-linear-to-tr from-[#0b2fa3]/35 via-transparent to-[#f50c0c]/30 opacity-75 blur-2xl light:opacity-35" />
 
-              <TiltCard className="group overflow-hidden rounded-2xl border border-white/12 bg-[#0c1017]/90 p-5 shadow-2xl backdrop-blur-2xl sm:p-6">
+              <TiltCard className="group overflow-hidden rounded-2xl border border-white/12 bg-[#0c1017]/90 p-5 shadow-2xl backdrop-blur-2xl sm:p-6 light:bg-obsidian-1/90 light:shadow-xl">
                 {/* HUD header and active chips */}
                 <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 border-b border-white/8 pb-4">
                   <div className="flex items-center gap-3">
@@ -138,7 +138,8 @@ export function Hero() {
                 </div>
 
                 {/* Visual centrepiece: interactive 3D WebGL neural scene */}
-                <div className="relative my-4 flex h-[400px] w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#05070c] transition-colors group-hover:border-blue-500/30 sm:h-[450px]">
+                {/* A dark "instrument screen" in both themes: the glow effects need a dark field. */}
+                <div data-theme="dark" className="relative my-4 flex h-[400px] w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#05070c] transition-colors group-hover:border-blue-500/30 sm:h-[450px]">
                   <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
                     <div className="absolute -top-12 -left-12 size-64 animate-pulse-slow rounded-full bg-red-600/25 blur-[80px]" />
                     <div className="absolute -right-12 -bottom-14 size-72 animate-pulse-slow rounded-full bg-blue-600/30 blur-[90px]" />
@@ -197,7 +198,7 @@ export function Hero() {
                 {/* Lower real-time diagnostic bar */}
                 <div className="relative z-20 space-y-2.5 pt-1">
                   <div className="flex items-center justify-between gap-4 text-xs">
-                    <span className="flex items-center gap-1.5 text-[#94a3b8]">
+                    <span className="flex items-center gap-1.5 text-silver">
                       <SlidersHorizontal aria-hidden className="size-4 text-blue-400" />
                       Integrated Engineering Capacity
                     </span>
@@ -206,7 +207,7 @@ export function Hero() {
                   <div className="h-2 w-full overflow-hidden rounded-full bg-white/8 p-0.5">
                     <div className="h-full w-full rounded-full bg-linear-to-r from-[#0b2fa3] via-indigo-500 to-[#f50c0c]" />
                   </div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5 font-mono text-[11px] text-[#64748b]">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5 font-mono text-[11px] text-slate">
                     <span>Protocol: Tailored Architectures</span>
                     <span className="text-emerald-400">Aligned with Verified Objectives</span>
                   </div>
@@ -235,7 +236,7 @@ function Highlight({ tone, children }: { tone: "blue" | "red"; children: React.R
         aria-hidden
         className={cn(
           "absolute inset-x-0 bottom-1.5 z-0 h-2.5 rounded",
-          tone === "blue" ? "-rotate-1 bg-[#0b2fa3]/50" : "rotate-1 bg-[#f50c0c]/40",
+          tone === "blue" ? "-rotate-1 bg-[#0b2fa3]/50 light:bg-[#0b2fa3]/12" : "rotate-1 bg-[#f50c0c]/40 light:bg-[#f50c0c]/12",
         )}
       />
     </span>
