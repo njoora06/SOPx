@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { SECTION_IDS, activeNavHref } from "@/lib/constants";
 
 /**
  * Id of the section crossing the middle of the viewport, or `null` above the
@@ -8,6 +10,13 @@ import { useEffect, useState } from "react";
  */
 export function useActiveSection(ids: readonly string[]) {
   const [active, setActive] = useState<string | null>(null);
+  // The header persists across routes, so reset and re-observe after each navigation.
+  const pathname = usePathname();
+  const [observedPath, setObservedPath] = useState(pathname);
+  if (observedPath !== pathname) {
+    setObservedPath(pathname);
+    setActive(null);
+  }
 
   useEffect(() => {
     const elements = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
@@ -34,7 +43,12 @@ export function useActiveSection(ids: readonly string[]) {
     );
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [ids]);
+  }, [ids, pathname]);
 
   return active;
+}
+
+/** Href of the navbar link to highlight on the current route. */
+export function useActiveNavHref() {
+  return activeNavHref(usePathname(), useActiveSection(SECTION_IDS));
 }

@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         // Solid vermilion → deep crimson on hover, white text, ambient vermilion halo.
-        primary: "bg-vermilion text-white shadow-glow-primary hover:bg-crimson",
+        primary: "bg-vermilion text-primary-foreground shadow-glow-primary hover:bg-crimson",
         // Carbon surface with slate border; hover shifts edge to silver and text to white.
         secondary:
           "border border-slate-border bg-obsidian-2 text-snow hover:border-silver hover:text-white",

@@ -1,15 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 import { Reveal } from "@/components/animations/reveal";
 import { serviceFilters, services } from "@/data/services";
 import { cn } from "@/lib/utils";
 import type { ServiceCategory } from "@/types";
 import { ServiceCard } from "./service-card";
 
+/** Element id of a service's card in the grid, used as a scroll target. */
+export const serviceElementId = (number: string) => `service-${number}`;
+
+/** Dispatched on `window` to clear the category filter so every card is in the DOM. */
+export const SHOW_ALL_SERVICES_EVENT = "sopx:show-all-services";
+
 /** Category tab strip + the services grid it filters. */
 export function ServicesExplorer() {
   const [active, setActive] = useState<ServiceCategory | "all">("all");
+
+  useEffect(() => {
+    // Synchronous so the dispatcher can scroll to the card right after.
+    const showAll = () => flushSync(() => setActive("all"));
+    window.addEventListener(SHOW_ALL_SERVICES_EVENT, showAll);
+    return () => window.removeEventListener(SHOW_ALL_SERVICES_EVENT, showAll);
+  }, []);
   const visible = active === "all" ? services : services.filter((s) => s.category === active);
 
   return (
@@ -39,7 +53,7 @@ export function ServicesExplorer() {
 
       <div id="services-grid" role="tabpanel" className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {visible.map((service, i) => (
-          <Reveal key={service.number} index={i % 3} variant="scale" className={cn("h-full", service.wide && active === "all" && "md:col-span-2")}>
+          <Reveal key={service.number} id={serviceElementId(service.number)} index={i % 3} variant="scale" className={cn("h-full", service.wide && active === "all" && "md:col-span-2")}>
             <ServiceCard service={service} />
           </Reveal>
         ))}

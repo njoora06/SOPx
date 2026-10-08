@@ -4,9 +4,19 @@
 /*
  * Design system: "Obsidian Kinetic" — source of truth is DESIGN.md.
  * Components only use the Tailwind utilities generated from these tokens.
+ *
+ * Themes: <html data-theme="dark|light"> (set before paint by lib/theme.ts).
+ * Light is the default for first visits. A subtree with data-theme="dark" (e.g. the hero's 3D
+ * viewport) re-establishes the dark tokens inside the light theme.
  */
 
-:root {
+/* `light:` styles apply in the light theme, but not inside a dark island. */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *):not(:where([data-theme="dark"], [data-theme="dark"] *)));
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
   /* ── Brand palette (DESIGN.md › Colors) ───────────────────────────── */
   --vermilion: #ef4444;        /* Primary accent — Precision Vermilion */
   --crimson: #dc2626;          /* Tertiary accent — Deep Crimson */
@@ -18,7 +28,8 @@
   --carbon: #1f2430;           /* Hairline border */
   --slate-border: #2a303c;     /* Muted / interactive border */
   --slate: #64748b;            /* Placeholder copy */
-  --white: #ffffff;
+  --white: #ffffff;            /* True white, e.g. text on vermilion */
+  --ink: #ffffff;              /* Max-contrast ink: Tailwind's `white` resolves to this */
   --snow: #f8fafc;
   --telemetry-normal: #22c55e; /* "green for normal telemetry" — exact hex not specified */
 
@@ -89,6 +100,110 @@
   --border: var(--carbon);
   --input: var(--carbon);
   --ring: var(--vermilion);
+
+  /* ── Elevation glows ──────────────────────────────────────────────── */
+  --glow-hover: 0 0 20px -4px rgb(239 68 68 / 0.18);
+  --glow-primary: 0 0 16px rgb(239 68 68 / 0.35);
+  --glow-focus: 0 0 0 1px #ef4444, 0 0 12px rgb(239 68 68 / 0.2);
+}
+
+/* ── Light theme: porcelain surfaces, graphite ink, the same brand red ──
+ * Not an inversion: surfaces step from a cool canvas up to white cards,
+ * neon halos become soft elevation, and accents deepen to keep AA contrast. */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --vermilion: #dc2626;
+  --crimson: #b91c1c;
+  --silver: #475569;
+  --obsidian-0: #f5f7fa;
+  --obsidian-1: #ffffff;
+  --obsidian-2: #eef1f5;
+  --void: #eaeef3;             /* Footer ground: one step below the canvas */
+  --carbon: #e3e7ed;
+  --slate-border: #d4dae3;
+  --slate: #64748b;
+  --ink: #0a0b0e;
+  --snow: #0f172a;
+  --telemetry-normal: #16a34a;
+
+  --surface: #f8fafc;
+  --surface-dim: #ffffff;
+  --surface-bright: #dde5f0;
+  --surface-container-lowest: #f0f3f7;
+  --surface-container-low: #eef1f5;
+  --surface-container: #e9edf2;
+  --surface-container-high: #e3e7ed;
+  --surface-container-highest: #dde2e9;
+  --secondary-container: #c9d5e6;
+
+  --background: var(--obsidian-0);
+  --foreground: var(--snow);
+  --card: var(--obsidian-1);
+  --card-foreground: var(--snow);
+  --popover: var(--obsidian-1);
+  --popover-foreground: var(--snow);
+  --primary: var(--vermilion);
+  --primary-foreground: var(--white);
+  --secondary: var(--obsidian-2);
+  --secondary-foreground: var(--snow);
+  --muted: var(--obsidian-2);
+  --muted-foreground: var(--silver);
+  --accent: rgb(10 11 14 / 0.04);
+  --accent-foreground: var(--ink);
+  --destructive: var(--vermilion);
+  --border: var(--carbon);
+  --input: var(--slate-border);
+  --ring: var(--vermilion);
+
+  --glow-hover: 0 1px 2px rgb(15 23 42 / 0.05), 0 12px 28px -12px rgb(220 38 38 / 0.22);
+  --glow-primary: 0 1px 2px rgb(15 23 42 / 0.08), 0 6px 16px -6px rgb(220 38 38 / 0.45);
+  --glow-focus: 0 0 0 1px #dc2626, 0 0 0 4px rgb(220 38 38 / 0.15);
+}
+
+/* Tailwind tints the dark design uses for text on obsidian (slate-300,
+ * blue-400…) deepen to their AA-contrast counterparts in the light theme,
+ * so components and content data need no per-theme classes. */
+[data-theme="light"] {
+  --color-slate-200: oklch(37.2% 0.044 257.287); /* → slate-700 */
+  --color-slate-300: oklch(44.6% 0.043 257.281); /* → slate-600 */
+  --color-slate-400: oklch(55.4% 0.046 257.417); /* → slate-500 */
+  --color-blue-300: oklch(48.8% 0.243 264.376); /* → blue-700 */
+  --color-blue-400: oklch(54.6% 0.245 262.881); /* → blue-600 */
+  --color-red-200: oklch(50.5% 0.213 27.518); /* → red-700 */
+  --color-red-300: oklch(50.5% 0.213 27.518); /* → red-700 */
+  --color-red-400: oklch(57.7% 0.245 27.325); /* → red-600 */
+  --color-emerald-200: oklch(43.2% 0.095 166.913); /* → emerald-800 */
+  --color-emerald-300: oklch(50.8% 0.118 165.612); /* → emerald-700 */
+  --color-emerald-400: oklch(50.8% 0.118 165.612); /* → emerald-700 */
+  --color-emerald-950: oklch(97.9% 0.021 166.113); /* → emerald-50 */
+  --color-rose-200: oklch(58.6% 0.253 17.585); /* → rose-600 */
+  --color-rose-300: oklch(64.5% 0.246 16.439); /* → rose-500 */
+  --color-indigo-200: oklch(51.1% 0.262 276.966); /* → indigo-600 */
+  --color-indigo-300: oklch(51.1% 0.262 276.966); /* → indigo-600 */
+  --color-indigo-400: oklch(51.1% 0.262 276.966); /* → indigo-600 */
+  --color-amber-200: oklch(66.6% 0.179 58.318); /* → amber-600 */
+}
+/* Dark islands inside the light theme keep Tailwind's original tints. */
+[data-theme="light"] [data-theme="dark"] {
+  --color-slate-200: oklch(92.9% 0.013 255.508);
+  --color-slate-300: oklch(86.9% 0.022 252.894);
+  --color-slate-400: oklch(70.4% 0.04 256.788);
+  --color-blue-300: oklch(80.9% 0.105 251.813);
+  --color-blue-400: oklch(70.7% 0.165 254.624);
+  --color-red-200: oklch(88.5% 0.062 18.334);
+  --color-red-300: oklch(80.8% 0.114 19.571);
+  --color-red-400: oklch(70.4% 0.191 22.216);
+  --color-emerald-200: oklch(90.5% 0.093 164.15);
+  --color-emerald-300: oklch(84.5% 0.143 164.978);
+  --color-emerald-400: oklch(76.5% 0.177 163.223);
+  --color-emerald-950: oklch(26.2% 0.051 172.552);
+  --color-rose-200: oklch(89.2% 0.058 10.001);
+  --color-rose-300: oklch(81% 0.117 11.638);
+  --color-indigo-200: oklch(87% 0.065 274.039);
+  --color-indigo-300: oklch(78.5% 0.115 274.713);
+  --color-indigo-400: oklch(67.3% 0.182 276.935);
+  --color-amber-200: oklch(92.4% 0.12 95.746);
 }
 
 @theme inline {
@@ -96,6 +211,7 @@
   --color-vermilion: var(--vermilion);
   --color-crimson: var(--crimson);
   --color-silver: var(--silver);
+  --color-white: var(--ink);
   --color-obsidian-0: var(--obsidian-0);
   --color-obsidian-1: var(--obsidian-1);
   --color-obsidian-2: var(--obsidian-2);
@@ -197,9 +313,9 @@
   --spacing-space-xl: 2.5rem;
 
   /* Elevation glows (DESIGN.md › Elevation & Depth, Components) */
-  --shadow-glow-hover: 0 0 20px -4px rgb(239 68 68 / 0.18);
-  --shadow-glow-primary: 0 0 16px rgb(239 68 68 / 0.35);
-  --shadow-glow-focus: 0 0 0 1px #ef4444, 0 0 12px rgb(239 68 68 / 0.2);
+  --shadow-glow-hover: var(--glow-hover);
+  --shadow-glow-primary: var(--glow-primary);
+  --shadow-glow-focus: var(--glow-focus);
 
   /* Homepage motion (from the page design) */
   --animate-pulse-slow: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -346,13 +462,13 @@
   border: 1px solid var(--slate-border);
   transition: border-color 200ms, box-shadow 200ms;
   &:hover {
-    border-color: rgb(239 68 68 / 0.4);
-    box-shadow: 0 0 20px -4px rgb(239 68 68 / 0.18);
+    border-color: color-mix(in oklab, var(--vermilion) 40%, transparent);
+    box-shadow: var(--glow-hover);
   }
 }
 @utility layer-3 {
   position: relative;
-  background-color: rgb(22 25 34 / 0.85);
+  background-color: color-mix(in oklab, var(--obsidian-2) 85%, transparent);
   backdrop-filter: blur(16px);
   border: 1px solid var(--slate-border);
   &::before {
@@ -366,28 +482,28 @@
 }
 /* Directional highlight sheen for high-priority items. */
 @utility edge-light {
-  background-image: linear-gradient(135deg, rgb(239 68 68 / 0.25) 0%, rgb(255 255 255 / 0.03) 40%, transparent 100%);
+  background-image: linear-gradient(135deg, color-mix(in oklab, var(--vermilion) 25%, transparent) 0%, color-mix(in oklab, var(--ink) 3%, transparent) 40%, transparent 100%);
 }
 
 /* Faint architectural grid backdrop. */
 @utility grid-backdrop {
   background-size: 44px 44px;
   background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.028) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.028) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, var(--ink) 2.8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--ink) 2.8%, transparent) 1px, transparent 1px);
 }
 /* Dot-matrix coordinate overlay. */
 @utility dot-matrix {
-  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 /* Radar-style map backdrop: vermilion dots over a faint grid. */
 @utility tactical-grid {
   background-size: 24px 24px;
   background-image:
-    radial-gradient(circle, rgb(239 68 68 / 0.15) 1px, transparent 1px),
-    linear-gradient(to right, rgb(255 255 255 / 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.02) 1px, transparent 1px);
+    radial-gradient(circle, color-mix(in oklab, var(--vermilion) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in oklab, var(--ink) 2%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--ink) 2%, transparent) 1px, transparent 1px);
 }
 @utility scrollbar-none {
   scrollbar-width: none;
@@ -480,6 +596,19 @@
 ::view-transition-new(site-header) {
   animation: none;
 }
+/* Theme switch (lib/theme.ts): colours ease over briefly, then this class is removed. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-property: color, background-color, border-color, outline-color, fill, stroke, box-shadow, text-decoration-color !important;
+    transition-duration: 300ms !important;
+    transition-timing-function: var(--ease-in-out) !important;
+    transition-delay: 0ms !important;
+  }
+}
+
 /* Clicks during a transition reach the live page. */
 ::view-transition {
   pointer-events: none;
@@ -518,8 +647,8 @@
     scrollbar-color: var(--carbon) var(--obsidian-0);
   }
   ::selection {
-    background: rgb(239 68 68 / 0.3);
-    color: var(--white);
+    background: color-mix(in oklab, var(--vermilion) 30%, transparent);
+    color: var(--ink);
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

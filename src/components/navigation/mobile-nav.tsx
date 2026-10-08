@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useActiveSection } from "@/hooks/use-active-section";
-import { MAIN_NAV, SECTION_IDS, activeNavHref } from "@/lib/constants";
+import { useActiveNavHref } from "@/hooks/use-active-section";
+import { MAIN_NAV } from "@/lib/constants";
 import { scrollToSection } from "./section-link";
 
 /** Below 1280px the navigation collapses into an overlay drawer (DESIGN.md › Tablet). */
@@ -15,7 +15,7 @@ export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pendingHref = useRef<string | null>(null);
   const router = useRouter();
-  const activeHref = activeNavHref(useActiveSection(SECTION_IDS));
+  const activeHref = useActiveNavHref();
 
   const navigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;

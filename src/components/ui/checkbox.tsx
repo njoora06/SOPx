@@ -15,7 +15,7 @@ function Checkbox({
       data-slot="checkbox"
       className={cn(
         "peer size-4 shrink-0 rounded-sm border border-slate-border bg-obsidian-0 transition-[background-color,border-color,box-shadow] outline-none focus-visible:shadow-glow-focus disabled:cursor-not-allowed disabled:opacity-50",
-        "data-[state=checked]:border-vermilion data-[state=checked]:bg-vermilion data-[state=checked]:text-white data-[state=checked]:shadow-[0_0_0_3px_rgb(239_68_68/0.25)]",
+        "data-[state=checked]:border-vermilion data-[state=checked]:bg-vermilion data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-[0_0_0_3px_rgb(239_68_68/0.25)]",
         className
       )}
       {...props}

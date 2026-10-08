@@ -10,6 +10,7 @@ interface RevealProps {
   index?: number;
   variant?: RevealVariant;
   as?: "div" | "li";
+  id?: string;
   className?: string;
 }
 
@@ -39,7 +40,7 @@ function getObserver() {
  * (`html.js`, see globals.css), so it remains visible before hydration,
  * without JS, and for users who prefer reduced motion.
  */
-export function Reveal({ children, index = 0, variant = "up", as: Tag = "div", className }: RevealProps) {
+export function Reveal({ children, index = 0, variant = "up", as: Tag = "div", id, className }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export function Reveal({ children, index = 0, variant = "up", as: Tag = "div", c
   return (
     <Tag
       ref={ref as React.Ref<HTMLDivElement & HTMLLIElement>}
+      id={id}
       data-reveal={variant}
       className={className}
       style={step ? ({ "--reveal-step": step } as React.CSSProperties) : undefined}

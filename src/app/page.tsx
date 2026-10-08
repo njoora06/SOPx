@@ -1,6 +1,4 @@
 import { PageTransition } from "@/components/animations/page-transition";
-import { AboutSection } from "@/components/sections/about-section";
-import { ContactSection } from "@/components/sections/contact-section";
 import { Hero } from "@/components/sections/hero";
 import { IndustriesSection } from "@/components/sections/industries-section";
 import { ServicesSection } from "@/components/sections/services-section";
@@ -12,13 +10,11 @@ export default function HomePage() {
   return (
     <PageTransition>
       <Hero />
-      <AboutSection />
       <WhatWeDoSection />
       <ServicesSection />
       <IndustriesSection />
       <WhySection />
       <VisionMissionSection />
-      <ContactSection />
     </PageTransition>
   );
 }

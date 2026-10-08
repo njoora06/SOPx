@@ -12,7 +12,7 @@ export const ROUTES = {
   terms: "/terms",
 } as const;
 
-/** Homepage section anchors (the design is a single scrolling page). */
+/** Section anchors (About and Contact live on their own pages). */
 export const SECTIONS = {
   about: "about-overview",
   services: "services-matrix",
@@ -22,20 +22,24 @@ export const SECTIONS = {
 } as const;
 
 /** Sections the navbar tracks while scrolling, in page order. */
-export const SECTION_IDS = [SECTIONS.about, SECTIONS.services, SECTIONS.industries, SECTIONS.why, SECTIONS.contact] as const;
+export const SECTION_IDS = [SECTIONS.services, SECTIONS.industries, SECTIONS.why] as const;
 
-/** Nav href for the section in view; `null` (page top) maps to Home. */
-export function activeNavHref(sectionId: string | null) {
+/**
+ * Nav href to highlight: the route itself on standalone pages, otherwise the
+ * homepage section in view (`null`, the page top, maps to Home).
+ */
+export function activeNavHref(pathname: string, sectionId: string | null) {
+  if (pathname !== ROUTES.home) return pathname;
   return sectionId ? `/#${sectionId}` : "/";
 }
 
 export const MAIN_NAV: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "About", href: `/#${SECTIONS.about}` },
   { label: "Services", href: `/#${SECTIONS.services}` },
   { label: "Industries", href: `/#${SECTIONS.industries}` },
   { label: "Why SOPX Tech", href: `/#${SECTIONS.why}` },
-  { label: "Contact", href: `/#${SECTIONS.contact}` },
+  { label: "About", href: ROUTES.about },
+  { label: "Contact", href: ROUTES.contact },
 ];
 
 export const LEGAL_NAV: NavItem[] = [
@@ -43,5 +47,5 @@ export const LEGAL_NAV: NavItem[] = [
   { label: "Terms & Conditions", href: ROUTES.terms },
 ];
 
-/** "Get a Consultation" buttons scroll to the consultation CTA section. */
-export const CONSULTATION_HREF = `/#${SECTIONS.contact}`;
+/** "Get a Consultation" buttons open the contact page with the consultation form. */
+export const CONSULTATION_HREF = ROUTES.contact;

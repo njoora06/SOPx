@@ -141,7 +141,7 @@ export function ConsultationForm() {
                       className={cn(
                         "flex items-center gap-2 rounded-xl border p-2.5 text-left text-xs font-medium transition-all outline-none focus-visible:shadow-glow-focus",
                         active
-                          ? "border-red-500/50 bg-vermilion text-white"
+                          ? "border-red-500/50 bg-vermilion text-primary-foreground"
                           : "border-white/8 bg-obsidian-2 text-slate-300 hover:border-white/20 hover:text-white",
                       )}
                     >
@@ -197,7 +197,7 @@ export function ConsultationForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-red-400/30 bg-linear-to-r from-vermilion via-crimson to-vermilion px-6 py-3.5 text-sm font-semibold tracking-wide text-white shadow-[0_0_16px_-2px_rgb(239_68_68/0.18)] transition-all duration-200 outline-none hover:from-red-500 hover:to-crimson hover:shadow-[0_0_25px_-4px_rgb(239_68_68/0.35)] focus-visible:shadow-glow-focus disabled:cursor-not-allowed disabled:opacity-60"
+        className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-red-400/30 bg-linear-to-r from-vermilion via-crimson to-vermilion px-6 py-3.5 text-sm font-semibold tracking-wide text-primary-foreground shadow-[0_0_16px_-2px_rgb(239_68_68/0.18)] transition-all duration-200 outline-none hover:from-red-500 hover:to-crimson hover:shadow-[0_0_25px_-4px_rgb(239_68_68/0.35)] focus-visible:shadow-glow-focus disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span>{copy.submit}</span>
         <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-1" aria-hidden />

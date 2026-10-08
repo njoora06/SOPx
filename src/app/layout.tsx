@@ -8,6 +8,7 @@ import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { company } from "@/data/company";
+import { DEFAULT_THEME, themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 const sora = Sora({ variable: "--font-sora", subsets: ["latin"], weight: ["600", "700"], display: "swap" });
@@ -37,16 +38,18 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: company.legalName,
   url: company.url,
+  logo: new URL("/logo/sopx-tech-logo.webp", company.url).toString(),
   email: company.email,
   sameAs: company.socials.map((s) => s.href),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${sora.variable} ${geist.variable} ${geistMono.variable}`}>
+    <html lang="en" data-theme={DEFAULT_THEME} suppressHydrationWarning className={`${sora.variable} ${geist.variable} ${geistMono.variable}`}>
       <head>
-        {/* Lets CSS hide reveal-on-scroll content only when JS will reveal it. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Lets CSS hide reveal-on-scroll content only when JS will reveal it,
+            and applies the saved theme before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js');${themeInitScript}` }} />
       </head>
       <body className="relative overflow-x-hidden pb-18 md:pb-0">
         <script

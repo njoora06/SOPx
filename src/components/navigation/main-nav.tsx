@@ -1,13 +1,13 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { useActiveSection } from "@/hooks/use-active-section";
-import { MAIN_NAV, SECTION_IDS, activeNavHref } from "@/lib/constants";
+import { useActiveNavHref } from "@/hooks/use-active-section";
+import { MAIN_NAV } from "@/lib/constants";
 import { SectionLink } from "./section-link";
 
 /** Desktop navigation; one pill glides to whichever section is in view. */
 export function MainNav() {
-  const activeHref = activeNavHref(useActiveSection(SECTION_IDS));
+  const activeHref = useActiveNavHref();
   const linkRefs = useRef(new Map<string, HTMLAnchorElement>());
   const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
 
