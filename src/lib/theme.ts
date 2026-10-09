@@ -1,10 +1,14 @@
+import { prefersReducedMotion } from "@/lib/motion";
+
 export type Theme = "light" | "dark";
 
 export const THEME_STORAGE_KEY = "sopx-theme";
 export const DEFAULT_THEME: Theme = "light";
 
-/** How long colours ease between themes; matches `.theme-transition` in globals.css. */
-const THEME_TRANSITION_MS = 350;
+/** On <html> while a theme switch animates; scopes the crossfade rules in globals.css. */
+const SWITCHING_CLASS = "theme-switching";
+/** On <html> for the restyle itself, so components' colour transitions don't all fire at once. */
+const NO_TRANSITIONS_CLASS = "theme-no-transitions";
 
 /**
  * Inline <head> script: applies the saved theme before first paint so a
@@ -16,15 +20,47 @@ export function getTheme(): Theme {
   return document.documentElement.dataset.theme === "light" ? "light" : "dark";
 }
 
-let transitionTimer: ReturnType<typeof setTimeout> | undefined;
+let latestSwitch = 0;
 
-/** Switches theme with a brief colour transition and remembers the choice. */
+/**
+ * Switches theme and remembers the choice. Where View Transitions are
+ * supported, the browser crossfades a snapshot of the old theme into the new
+ * one on the compositor, so the page restyles once instead of easing colours
+ * on every element (which froze the page for hundreds of milliseconds).
+ * Otherwise, with reduced motion, or in a background tab, it switches instantly.
+ */
 export function setTheme(theme: Theme) {
   const root = document.documentElement;
-  root.classList.add("theme-transition");
-  root.dataset.theme = theme;
-  clearTimeout(transitionTimer);
-  transitionTimer = setTimeout(() => root.classList.remove("theme-transition"), THEME_TRANSITION_MS);
+  const apply = () => {
+    root.classList.add(NO_TRANSITIONS_CLASS);
+    root.dataset.theme = theme;
+  };
+  const restoreTransitions = () => root.classList.remove(NO_TRANSITIONS_CLASS);
+
+  const animate =
+    theme !== getTheme() &&
+    typeof document.startViewTransition === "function" &&
+    document.visibilityState === "visible" &&
+    !prefersReducedMotion();
+
+  if (animate) {
+    const id = ++latestSwitch;
+    const isLatest = () => id === latestSwitch;
+    root.classList.add(SWITCHING_CLASS);
+    const transition = document.startViewTransition(apply);
+    // `ready` resolves once the new theme has been styled and captured, so
+    // transitions can come back. It rejects when a newer switch skips this one.
+    transition.ready.then(
+      () => isLatest() && restoreTransitions(),
+      () => isLatest() && restoreTransitions(),
+    );
+    transition.finished.finally(() => isLatest() && root.classList.remove(SWITCHING_CLASS));
+  } else {
+    apply();
+    void document.body.offsetWidth; // apply the new styles now, while transitions are off
+    restoreTransitions();
+  }
+
   try {
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   } catch {

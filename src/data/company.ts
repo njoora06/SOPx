@@ -7,6 +7,6 @@ export const company: CompanyInfo = {
   description:
     "SOPX Tech Private Limited is a technology company that helps organizations use the right technology to improve their work, increase efficiency, and grow their business.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.sopxtech.com",
-  email: "hello@sopxtech.com",
+  email: "sopxtech@gmail.com",
   socials: [],
 };

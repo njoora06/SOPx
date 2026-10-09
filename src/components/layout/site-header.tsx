@@ -14,7 +14,7 @@ export function SiteHeader() {
   return (
     <header style={{ viewTransitionName: "site-header" }} className="fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-obsidian-0/85 backdrop-blur-2xl">
       <Container className="flex h-20 items-center justify-between gap-4">
-        <Logo withTagline />
+        <Logo eager />
 
         <MainNav />
 

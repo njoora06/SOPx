@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { CornerDownLeft, Search } from "lucide-react";
 import { Dialog } from "radix-ui";
 import { SHOW_ALL_SERVICES_EVENT, serviceElementId } from "@/components/services/services-explorer";
 import { serviceFilters, services } from "@/data/services";
+import { useScrollAfterClose } from "@/hooks/use-scroll-after-close";
 import { accentStyles } from "@/lib/accent";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/types";
-import { scrollToSection } from "./section-link";
 
 const categoryLabel = Object.fromEntries(serviceFilters.map((f) => [f.value, f.label]));
 
@@ -26,10 +25,10 @@ export function ServiceSearch() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
-  const pendingHref = useRef<string | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const router = useRouter();
   const listId = useId();
+  // The chosen card may be hidden by the category filter, so show all first.
+  const { scrollAfterClose, onCloseAutoFocus } = useScrollAfterClose(() => window.dispatchEvent(new Event(SHOW_ALL_SERVICES_EVENT)));
 
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
   const results = words.length ? services.filter((s) => matches(s, words)) : services;
@@ -59,21 +58,8 @@ export function ServiceSearch() {
   };
 
   const choose = (service: Service) => {
-    pendingHref.current = `/#${serviceElementId(service.number)}`;
+    scrollAfterClose(`/#${serviceElementId(service.number)}`);
     setOpen(false);
-  };
-
-  // The open dialog locks page scroll, so scroll once it has fully closed.
-  const onCloseAutoFocus = (e: Event) => {
-    const href = pendingHref.current;
-    if (!href) return;
-    pendingHref.current = null;
-    e.preventDefault(); // focus goes to the chosen card instead of the trigger
-    setTimeout(() => {
-      // The card may be hidden by the category filter.
-      window.dispatchEvent(new Event(SHOW_ALL_SERVICES_EVENT));
-      if (!scrollToSection(href)) router.push(href);
-    });
   };
 
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

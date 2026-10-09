@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-// DESIGN.md › Components › Input Fields
+// Design system input field (tokens in app/globals.css).
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input

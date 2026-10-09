@@ -1,23 +1,23 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { hasFinePointer, prefersReducedMotion } from "@/lib/motion";
 
 const RADIUS = 650;
 
 /**
  * Soft light that trails the cursor across the page (desktop pointers only).
- * Uses a neutral silver tint: DESIGN.md reserves vermilion for focal points,
- * never ambient washes. The glow is moved with a compositor-only transform and
- * the loop idles once it has caught up with the cursor.
+ * Uses a neutral silver tint: vermilion is reserved for focal points, never
+ * ambient washes. It sits behind the page content (like AmbientMesh), so it
+ * lights the background without tinting text. The glow is moved with a
+ * compositor-only transform and the loop idles once it has caught up with the cursor.
  */
 export function CursorSpotlight() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!el || !fine || reduced) return;
+    if (!el || !hasFinePointer() || prefersReducedMotion()) return;
 
     let mouseX = 0;
     let mouseY = 0;
@@ -51,7 +51,7 @@ export function CursorSpotlight() {
   }, []);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-30 hidden overflow-hidden md:block">
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 hidden overflow-hidden md:block">
       <div
         ref={ref}
         className="absolute top-0 left-0 rounded-full opacity-0 transition-opacity duration-500 will-change-transform"

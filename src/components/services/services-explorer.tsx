@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Reveal } from "@/components/animations/reveal";
 import { serviceFilters, services } from "@/data/services";
@@ -14,6 +14,8 @@ export const serviceElementId = (number: string) => `service-${number}`;
 /** Dispatched on `window` to clear the category filter so every card is in the DOM. */
 export const SHOW_ALL_SERVICES_EVENT = "sopx:show-all-services";
 
+const tabId = (value: string) => `services-tab-${value}`;
+
 /** Category tab strip + the services grid it filters. */
 export function ServicesExplorer() {
   const [active, setActive] = useState<ServiceCategory | "all">("all");
@@ -25,16 +27,31 @@ export function ServicesExplorer() {
     return () => window.removeEventListener(SHOW_ALL_SERVICES_EVENT, showAll);
   }, []);
   const visible = active === "all" ? services : services.filter((s) => s.category === active);
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+  // ARIA tabs keyboard pattern: arrows move between tabs (wrapping), Home/End jump to the ends.
+  const onTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const index = serviceFilters.findIndex((f) => f.value === active);
+    const last = serviceFilters.length - 1;
+    const next = { ArrowRight: index === last ? 0 : index + 1, ArrowLeft: index === 0 ? last : index - 1, Home: 0, End: last }[e.key];
+    if (next === undefined) return;
+    e.preventDefault();
+    const filter = serviceFilters[next]!;
+    setActive(filter.value);
+    tabsRef.current?.querySelector<HTMLButtonElement>(`#${tabId(filter.value)}`)?.focus();
+  };
 
   return (
     <>
       <Reveal>
-        <div role="tablist" aria-label="Service categories" className="scrollbar-none mb-8 flex items-center gap-2 overflow-x-auto border-b border-white/6 pb-4">
+        <div ref={tabsRef} role="tablist" aria-label="Service categories" onKeyDown={onTabKeyDown} className="scrollbar-none mb-8 flex items-center gap-2 overflow-x-auto border-b border-white/6 pb-4">
           {serviceFilters.map((f) => (
             <button
               key={f.value}
+              id={tabId(f.value)}
               type="button"
               role="tab"
+              tabIndex={active === f.value ? 0 : -1}
               aria-selected={active === f.value}
               aria-controls="services-grid"
               onClick={() => setActive(f.value)}
@@ -51,7 +68,7 @@ export function ServicesExplorer() {
         </div>
       </Reveal>
 
-      <div id="services-grid" role="tabpanel" className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div id="services-grid" role="tabpanel" aria-labelledby={tabId(active)} className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {visible.map((service, i) => (
           <Reveal key={service.number} id={serviceElementId(service.number)} index={i % 3} variant="scale" className={cn("h-full", service.wide && active === "all" && "md:col-span-2")}>
             <ServiceCard service={service} />

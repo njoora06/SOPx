@@ -3,13 +3,7 @@ import type { NavItem } from "@/types";
 export const ROUTES = {
   home: "/",
   about: "/about",
-  services: "/services",
-  industries: "/industries",
-  whySopx: "/why-sopx-tech",
   contact: "/contact",
-  consultation: "/get-a-consultation",
-  privacy: "/privacy-policy",
-  terms: "/terms",
 } as const;
 
 /** Section anchors (About and Contact live on their own pages). */
@@ -42,10 +36,8 @@ export const MAIN_NAV: NavItem[] = [
   { label: "Contact", href: ROUTES.contact },
 ];
 
-export const LEGAL_NAV: NavItem[] = [
-  { label: "Privacy Policy", href: ROUTES.privacy },
-  { label: "Terms & Conditions", href: ROUTES.terms },
-];
+/** Footer legal links. Add Privacy Policy and Terms here once those pages exist. */
+export const LEGAL_NAV: NavItem[] = [];
 
 /** "Get a Consultation" buttons open the contact page with the consultation form. */
 export const CONSULTATION_HREF = ROUTES.contact;

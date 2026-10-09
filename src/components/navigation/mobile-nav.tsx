@@ -1,38 +1,25 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useActiveNavHref } from "@/hooks/use-active-section";
+import { useScrollAfterClose } from "@/hooks/use-scroll-after-close";
 import { MAIN_NAV } from "@/lib/constants";
-import { scrollToSection } from "./section-link";
 
-/** Below 1280px the navigation collapses into an overlay drawer (DESIGN.md › Tablet). */
+/** Below 1280px (the `xl` breakpoint) the navigation collapses into an overlay drawer. */
 export function MobileNav() {
   const [open, setOpen] = useState(false);
-  const pendingHref = useRef<string | null>(null);
-  const router = useRouter();
   const activeHref = useActiveNavHref();
+  const { scrollAfterClose, onCloseAutoFocus } = useScrollAfterClose();
 
   const navigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    // The open drawer locks page scroll, so scroll once it has fully closed.
     e.preventDefault();
-    pendingHref.current = href;
+    scrollAfterClose(href);
     setOpen(false);
-  };
-
-  const onCloseAutoFocus = (e: Event) => {
-    const href = pendingHref.current;
-    if (!href) return;
-    pendingHref.current = null;
-    e.preventDefault(); // focus goes to the target section instead of the trigger
-    setTimeout(() => {
-      if (!scrollToSection(href)) router.push(href);
-    });
   };
 
   return (

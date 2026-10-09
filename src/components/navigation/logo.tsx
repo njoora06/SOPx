@@ -4,21 +4,24 @@ import { company } from "@/data/company";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
-  /** Show the "Enterprise Architecture" sub-label (header only). */
-  withTagline?: boolean;
+  /** Load eagerly: it's above the fold (header only). */
+  eager?: boolean;
   className?: string;
 }
 
-/** Official lockup, cropped from /public/logo/logo.webp with the blue backdrop removed. */
-const LOGO_SRC = "/logo/sopx-tech-logo.webp";
+/** Transparent lockups: white lettering for the dark theme, blue lettering for the light theme. */
+const LOGO_DARK_THEME_SRC = "/logo/sopx-logo-dark.png";
+const LOGO_LIGHT_THEME_SRC = "/logo/sopx-logo-light.png";
 
-export function Logo({ withTagline = false, className }: LogoProps) {
+export function Logo({ eager = false, className }: LogoProps) {
   return (
     <Link href="/" aria-label={`${company.name} home`} className={cn("flex w-fit shrink-0 flex-col items-start gap-1 rounded outline-none focus-visible:shadow-glow-focus", className)}>
-      {/* Rendered at 40px tall; Next serves a 1x/2x srcset from these dimensions. */}
-      {/* The lockup has white lettering: in the light theme, invert it and turn the hue back so the "S" stays red. */}
-      <Image src={LOGO_SRC} alt={company.name} width={104} height={40} loading={withTagline ? "eager" : "lazy"} className="h-10 w-auto light:[filter:invert(1)_hue-rotate(180deg)]" />
-      {/* {withTagline && <span className="font-mono text-[9px] tracking-widest text-slate uppercase">Enterprise Architecture</span>} */}
+      {/* Rendered at 40px tall; Next serves a 1x/2x srcset from these dimensions.
+          Only the default (light) theme's logo loads eagerly. The other stays lazy,
+          and browsers never fetch a lazy image while it's display:none, so each
+          visitor downloads just the logo for their theme. */}
+      <Image src={LOGO_DARK_THEME_SRC} alt={company.name} width={97} height={40} loading="lazy" className="h-10 w-auto light:hidden" />
+      <Image src={LOGO_LIGHT_THEME_SRC} alt={company.name} width={97} height={40} loading={eager ? "eager" : "lazy"} className="hidden h-10 w-auto light:block" />
     </Link>
   );
 }

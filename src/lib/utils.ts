@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 
-// Teach tailwind-merge the DESIGN.md type scale so e.g. `text-title-md` is
+// Teach tailwind-merge the custom type scale (app/globals.css) so e.g. `text-title-md` is
 // treated as a font size and not dropped next to a `text-white` colour.
 const twMerge = extendTailwindMerge({
   extend: {
@@ -28,8 +28,4 @@ const twMerge = extendTailwindMerge({
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export function absoluteUrl(path: string, base: string) {
-  return new URL(path, base).toString();
 }

@@ -56,7 +56,7 @@ export const contactChannels = {
   phone: {
     label: "Phone / Direct & WhatsApp",
     display: "+91 9453012655",
-    href: "tel:+9453012655",
+    href: "tel:+919453012655",
     note: "Corporate line & WhatsApp Business escalation",
   },
   email: {

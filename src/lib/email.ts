@@ -12,7 +12,8 @@ interface SendEmailOptions {
 export async function sendNotificationEmail({ subject, text, replyTo }: SendEmailOptions) {
   const env = getServerEnv();
   if (!env.RESEND_API_KEY) {
-    console.warn("[email] RESEND_API_KEY is not set; skipping email:", subject);
+    // The subject carries the sender's name, so it stays out of the logs.
+    console.warn("[email] RESEND_API_KEY is not set; skipping notification email");
     return { skipped: true as const };
   }
 

@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 /*
- * Design system: "Obsidian Kinetic" — source of truth is DESIGN.md.
+ * Design system: "Obsidian Kinetic". This file is its source of truth.
  * Components only use the Tailwind utilities generated from these tokens.
  *
  * Themes: <html data-theme="dark|light"> (set before paint by lib/theme.ts).
@@ -17,7 +17,7 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* ── Brand palette (DESIGN.md › Colors) ───────────────────────────── */
+  /* ── Brand palette ──────────────────────────────────────────────────── */
   --vermilion: #ef4444;        /* Primary accent — Precision Vermilion */
   --crimson: #dc2626;          /* Tertiary accent — Deep Crimson */
   --silver: #94a3b8;           /* Secondary accent — High-Contrast Silver */
@@ -33,7 +33,7 @@
   --snow: #f8fafc;
   --telemetry-normal: #22c55e; /* "green for normal telemetry" — exact hex not specified */
 
-  /* ── Generated palette (DESIGN.md front matter) ───────────────────── */
+  /* ── Generated palette ──────────────────────────────────────────────── */
   --surface: #111319;
   --surface-dim: #111319;
   --surface-bright: #373940;
@@ -206,6 +206,21 @@
   --color-amber-200: oklch(92.4% 0.12 95.746);
 }
 
+/* Hero / HUD palette: the logo's brand red and blue, and the near-black panels
+   of the hero's "instrument screen" and the HQ map. These sit in dark islands
+   (data-theme="dark") or carry explicit light: overrides, so they don't change
+   with the theme. */
+@theme {
+  --color-brand-red: #f50c0c;
+  --color-brand-red-mid: #e30b0b;
+  --color-brand-red-deep: #c70909;
+  --color-brand-blue: #0b2fa3;
+  --color-hud-0: #05070c; /* screen backdrop */
+  --color-hud-1: #0c1017; /* panels & pills */
+  --color-hud-2: #0f141f; /* buttons */
+  --color-hud-3: #151c2c; /* button hover */
+}
+
 @theme inline {
   /* Colours → bg-*, text-*, border-* */
   --color-vermilion: var(--vermilion);
@@ -288,19 +303,19 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Typefaces (DESIGN.md › Typography) — loaded by next/font in app/layout.tsx */
+  /* Typefaces — loaded by next/font in app/layout.tsx */
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Shapes (DESIGN.md › rounded): rounded-sm, rounded, rounded-md, rounded-lg, rounded-xl */
+  /* Shapes: rounded-sm, rounded, rounded-md, rounded-lg, rounded-xl */
   --radius-sm: 0.125rem;
   --radius: 0.25rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
 
-  /* Spacing (DESIGN.md › spacing) → p-space-md, gap-gutter, px-margin… */
+  /* Spacing → p-space-md, gap-gutter, px-margin… */
   --spacing-gutter: 1.5rem;
   --spacing-gutter-sm: 1rem;
   --spacing-gutter-lg: 2rem;
@@ -312,7 +327,7 @@
   --spacing-space-lg: 1.5rem;
   --spacing-space-xl: 2.5rem;
 
-  /* Elevation glows (DESIGN.md › Elevation & Depth, Components) */
+  /* Elevation glows */
   --shadow-glow-hover: var(--glow-hover);
   --shadow-glow-primary: var(--glow-primary);
   --shadow-glow-focus: var(--glow-focus);
@@ -334,11 +349,13 @@
     0%, 100% { transform: translateY(-7px) scale(1.005); }
     50% { transform: translateY(7px) scale(0.995); }
   }
+  /* Moves a full-height wrapper (so 100% = the container's height) with
+     transform, which stays on the compositor; animating `top` relaid out every frame. */
   @keyframes scan-line {
-    0% { top: 0%; opacity: 0; }
+    0% { transform: translateY(0%); opacity: 0; }
     15% { opacity: 0.85; }
     85% { opacity: 0.85; }
-    100% { top: 100%; opacity: 0; }
+    100% { transform: translateY(100%); opacity: 0; }
   }
   @keyframes orbit {
     to { transform: rotate(360deg); }
@@ -377,7 +394,7 @@
   }
 }
 
-/* ── Typography scale (DESIGN.md › typography) ───────────────────────
+/* ── Typography scale ─────────────────────────────────────────────────
  * Display/headline sizes switch from their -mobile variant at 768px. */
 @utility text-display-hero {
   font-family: var(--font-display);
@@ -428,7 +445,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Layout grid (DESIGN.md › Layout & Spacing) ──────────────────────
+/* ── Layout grid ──────────────────────────────────────────────────────
  * Mobile <768px:      4 cols, 1rem margin, 1rem gutter
  * Tablet 768–1279px:  8 cols, 1.5rem margin, 1.5rem gutter
  * Desktop 1280px+:   12 cols, 2.5rem margin, 2rem gutter */
@@ -449,7 +466,7 @@
   }
 }
 
-/* ── Elevation layers (DESIGN.md › Elevation & Depth) ────────────────── */
+/* ── Elevation layers ────────────────────────────────────────────────── */
 @utility layer-0 {
   background-color: var(--obsidian-0);
 }
@@ -567,6 +584,26 @@
   animation: enter-scale 1000ms var(--ease-out-expo) 150ms backwards;
 }
 
+/* Reading-progress bar (components/animations/scroll-progress.tsx), driven by
+   scroll position in CSS. Without scroll-driven animation support it stays
+   hidden until the component's JS fallback shows and updates it. */
+.scroll-progress {
+  display: none;
+  transform: scaleX(0);
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    display: block;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes scroll-progress {
+  to { transform: scaleX(1); }
+}
+
 /* Page transitions (components/animations/page-transition.tsx). */
 @keyframes page-out {
   to { opacity: 0; transform: translate3d(0, -8px, 0); }
@@ -596,17 +633,40 @@
 ::view-transition-new(site-header) {
   animation: none;
 }
-/* Theme switch (lib/theme.ts): colours ease over briefly, then this class is removed. */
-@media (prefers-reduced-motion: no-preference) {
-  html.theme-transition,
-  html.theme-transition *,
-  html.theme-transition *::before,
-  html.theme-transition *::after {
-    transition-property: color, background-color, border-color, outline-color, fill, stroke, box-shadow, text-decoration-color !important;
-    transition-duration: 300ms !important;
-    transition-timing-function: var(--ease-in-out) !important;
-    transition-delay: 0ms !important;
-  }
+/* Theme switch (lib/theme.ts): the browser crossfades a snapshot of the old
+   theme into the new one on the compositor; nothing transitions per element.
+   Scoped by .theme-switching because page navigations keep the root (and the
+   header's old snapshot) still, per the rules above. */
+html.theme-switching::view-transition-old(root),
+html.theme-switching::view-transition-new(root),
+html.theme-switching::view-transition-old(site-header),
+html.theme-switching::view-transition-new(site-header) {
+  display: block;
+  animation-duration: 220ms;
+  animation-timing-function: var(--ease-in-out);
+  animation-fill-mode: both;
+}
+html.theme-switching::view-transition-old(root),
+html.theme-switching::view-transition-old(site-header) {
+  animation-name: theme-fade-out;
+}
+html.theme-switching::view-transition-new(root),
+html.theme-switching::view-transition-new(site-header) {
+  animation-name: theme-fade-in;
+}
+/* Set only while the new theme's styles are computed (lib/theme.ts): without
+   it, every element with transition-colors would ease its colours separately. */
+html.theme-no-transitions,
+html.theme-no-transitions *,
+html.theme-no-transitions *::before,
+html.theme-no-transitions *::after {
+  transition: none !important;
+}
+@keyframes theme-fade-out {
+  to { opacity: 0; }
+}
+@keyframes theme-fade-in {
+  from { opacity: 0; }
 }
 
 /* Clicks during a transition reach the live page. */

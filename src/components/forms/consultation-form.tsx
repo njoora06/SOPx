@@ -27,8 +27,47 @@ const defaultValues: ContactInput = {
   website: "",
 };
 
-function FieldError({ message }: { message?: string }) {
-  return message ? <p className="text-xs text-vermilion">{message}</p> : null;
+function FieldError({ id, message }: { id: string; message?: string }) {
+  return message ? (
+    <p id={id} className="text-xs text-vermilion">
+      {message}
+    </p>
+  ) : null;
+}
+
+/** Links an input to its error message so screen readers announce it on focus. */
+const errorProps = (id: string, message?: string) => ({
+  "aria-invalid": !!message,
+  "aria-describedby": message ? `${id}-error` : undefined,
+});
+
+interface TextFieldProps {
+  name: string;
+  label: string;
+  hint?: "required" | "optional";
+  error?: string;
+  /** Renders the control, given the shared id, styling, required and error props. */
+  children: (props: { id: string; className: string; required: boolean } & ReturnType<typeof errorProps>) => React.ReactNode;
+}
+
+/** Label, input and error message for one single-line field. */
+function TextField({ name, label, hint, error, children }: TextFieldProps) {
+  const id = `cf-${name}`;
+  return (
+    <div className="flex flex-col space-y-1.5">
+      <label htmlFor={id} className={cn(labelClass, "flex items-center justify-between")}>
+        <span>{label}</span>
+        {hint === "required" && (
+          <span className="text-vermilion" aria-hidden>
+            *
+          </span>
+        )}
+        {hint === "optional" && <span className="text-[10px] text-slate">Optional</span>}
+      </label>
+      {children({ id, className: fieldClass, required: hint === "required", ...errorProps(id, error) })}
+      <FieldError id={`${id}-error`} message={error} />
+    </div>
+  );
 }
 
 export function ConsultationForm() {
@@ -80,41 +119,22 @@ export function ConsultationForm() {
     <form className="space-y-6" onSubmit={onSubmit} noValidate>
       {/* Name & Email */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col space-y-1.5">
-          <label htmlFor="cf-name" className={cn(labelClass, "flex items-center justify-between")}>
-            <span>{copy.fields.name.label}</span>
-            <span className="text-vermilion">*</span>
-          </label>
-          <Input id="cf-name" autoComplete="name" placeholder={copy.fields.name.placeholder} aria-invalid={!!errors.name} className={fieldClass} {...register("name")} />
-          <FieldError message={errors.name?.message} />
-        </div>
-        <div className="flex flex-col space-y-1.5">
-          <label htmlFor="cf-email" className={cn(labelClass, "flex items-center justify-between")}>
-            <span>{copy.fields.email.label}</span>
-            <span className="text-vermilion">*</span>
-          </label>
-          <Input id="cf-email" type="email" autoComplete="email" placeholder={copy.fields.email.placeholder} aria-invalid={!!errors.email} className={fieldClass} {...register("email")} />
-          <FieldError message={errors.email?.message} />
-        </div>
+        <TextField name="name" label={copy.fields.name.label} hint="required" error={errors.name?.message}>
+          {(props) => <Input {...props} autoComplete="name" placeholder={copy.fields.name.placeholder} {...register("name")} />}
+        </TextField>
+        <TextField name="email" label={copy.fields.email.label} hint="required" error={errors.email?.message}>
+          {(props) => <Input {...props} type="email" autoComplete="email" placeholder={copy.fields.email.placeholder} {...register("email")} />}
+        </TextField>
       </div>
 
       {/* Phone & Organization */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col space-y-1.5">
-          <label htmlFor="cf-phone" className={cn(labelClass, "flex items-center justify-between")}>
-            <span>{copy.fields.phone.label}</span>
-            <span className="text-[10px] text-slate">Optional</span>
-          </label>
-          <Input id="cf-phone" type="tel" autoComplete="tel" placeholder={copy.fields.phone.placeholder} aria-invalid={!!errors.phone} className={fieldClass} {...register("phone")} />
-          <FieldError message={errors.phone?.message} />
-        </div>
-        <div className="flex flex-col space-y-1.5">
-          <label htmlFor="cf-company" className={labelClass}>
-            {copy.fields.company.label}
-          </label>
-          <Input id="cf-company" autoComplete="organization" placeholder={copy.fields.company.placeholder} aria-invalid={!!errors.company} className={fieldClass} {...register("company")} />
-          <FieldError message={errors.company?.message} />
-        </div>
+        <TextField name="phone" label={copy.fields.phone.label} hint="optional" error={errors.phone?.message}>
+          {(props) => <Input {...props} type="tel" autoComplete="tel" placeholder={copy.fields.phone.placeholder} {...register("phone")} />}
+        </TextField>
+        <TextField name="company" label={copy.fields.company.label} error={errors.company?.message}>
+          {(props) => <Input {...props} autoComplete="organization" placeholder={copy.fields.company.placeholder} {...register("company")} />}
+        </TextField>
       </div>
 
       {/* Primary scope pills */}
@@ -170,11 +190,12 @@ export function ConsultationForm() {
           id="cf-message"
           rows={3}
           placeholder={copy.fields.message.placeholder}
-          aria-invalid={!!errors.message}
+          required
+          {...errorProps("cf-message", errors.message?.message)}
           className={cn(fieldClass, "min-h-[105px] w-full resize-y border p-3.5 outline-none aria-invalid:border-vermilion")}
           {...register("message")}
         />
-        <FieldError message={errors.message?.message} />
+        <FieldError id="cf-message-error" message={errors.message?.message} />
       </div>
 
       {/* NDA */}
@@ -191,8 +212,8 @@ export function ConsultationForm() {
         </label>
       </div>
 
-      {/* Honeypot: hidden from people, left empty by real users. */}
-      <input type="text" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" {...register("website")} />
+      {/* Honeypot: moved off-screen rather than display:none, which many bots skip. */}
+      <input type="text" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-px w-px opacity-0" {...register("website")} />
 
       <button
         type="submit"

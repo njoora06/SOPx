@@ -16,6 +16,20 @@ export function easeInOutCubic(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 }
 
+// Media query lists are created once and shared; `.matches` stays current as settings change.
+const queries = new Map<string, MediaQueryList>();
+function matches(query: string) {
+  if (typeof window === "undefined") return false;
+  let list = queries.get(query);
+  if (!list) queries.set(query, (list = window.matchMedia(query)));
+  return list.matches;
+}
+
 export function prefersReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return matches("(prefers-reduced-motion: reduce)");
+}
+
+/** A mouse or trackpad that can hover (not touch). */
+export function hasFinePointer() {
+  return matches("(hover: hover) and (pointer: fine)");
 }

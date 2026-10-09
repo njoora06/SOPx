@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
 import { CursorSpotlight } from "@/components/animations/cursor-spotlight";
-import { MotionProvider } from "@/components/animations/motion-provider";
 import { ScrollProgress } from "@/components/animations/scroll-progress";
 import { AmbientMesh } from "@/components/layout/ambient-mesh";
 import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { company } from "@/data/company";
+import { contactChannels } from "@/data/contact";
+import { sharedOpenGraph } from "@/lib/seo";
 import { DEFAULT_THEME, themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -24,12 +25,9 @@ export const metadata: Metadata = {
   description: company.description,
   applicationName: company.name,
   authors: [{ name: company.legalName }],
-  openGraph: {
-    type: "website",
-    siteName: company.name,
-    locale: "en_IN",
-    url: "/",
-  },
+  alternates: { canonical: "/" },
+  openGraph: { ...sharedOpenGraph, url: "/" },
+  twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
 
@@ -38,8 +36,17 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: company.legalName,
   url: company.url,
-  logo: new URL("/logo/sopx-tech-logo.webp", company.url).toString(),
+  logo: new URL("/logo/sopx-logo-light.png", company.url).toString(),
   email: company.email,
+  telephone: contactChannels.phone.href.replace("tel:", ""),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Lajpat Nagar, Near Kanhaiya Talkies",
+    addressLocality: "Padrauna",
+    addressRegion: "Uttar Pradesh",
+    postalCode: "274304",
+    addressCountry: "IN",
+  },
   sameAs: company.socials.map((s) => s.href),
 };
 
@@ -56,15 +63,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <MotionProvider>
-          <ScrollProgress />
-          <CursorSpotlight />
-          <AmbientMesh />
-          <SiteHeader />
-          <main className="w-full pt-20">{children}</main>
-          <SiteFooter />
-          <MobileActionBar />
-        </MotionProvider>
+        <ScrollProgress />
+        <AmbientMesh />
+        <CursorSpotlight />
+        <SiteHeader />
+        <main className="w-full pt-20">{children}</main>
+        <SiteFooter />
+        <MobileActionBar />
       </body>
     </html>
   );
