@@ -4,7 +4,6 @@ import { IndustriesSection } from "@/components/sections/industries-section";
 import { ServicesSection } from "@/components/sections/services-section";
 import { VisionMissionSection } from "@/components/sections/vision-mission-section";
 import { WhatWeDoSection } from "@/components/sections/what-we-do-section";
-import { WhySection } from "@/components/sections/why-section";
 
 export default function HomePage() {
   return (
@@ -13,7 +12,6 @@ export default function HomePage() {
       <WhatWeDoSection />
       <ServicesSection />
       <IndustriesSection />
-      <WhySection />
       <VisionMissionSection />
     </PageTransition>
   );

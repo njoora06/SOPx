@@ -20,12 +20,16 @@ export function ThemeToggle() {
       size="icon"
       aria-label={label}
       title={label}
-      onClick={() => setTheme(next)}
+      onClick={(e) => {
+        // The new theme grows out of the button (also for keyboard presses).
+        const r = e.currentTarget.getBoundingClientRect();
+        setTheme(next, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+      }}
       className="relative overflow-hidden hover:text-white active:scale-95"
     >
       {/* Dark theme shows the sun (go light); light theme shows the moon. */}
-      <Sun aria-hidden className={cn(icon, "light:scale-50 light:-rotate-90 light:opacity-0")} />
-      <Moon aria-hidden className={cn(icon, "scale-50 rotate-90 opacity-0 light:scale-100 light:rotate-0 light:opacity-100")} />
+      <Sun aria-hidden data-theme-icon className={cn(icon, "light:scale-50 light:-rotate-90 light:opacity-0")} />
+      <Moon aria-hidden data-theme-icon className={cn(icon, "scale-50 rotate-90 opacity-0 light:scale-100 light:rotate-0 light:opacity-100")} />
     </Button>
   );
 }

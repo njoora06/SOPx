@@ -16,7 +16,7 @@ export function HeroConsole() {
     <ScrollFade className="relative">
       <div aria-hidden className="absolute -inset-1 rounded-3xl bg-linear-to-tr from-brand-blue/35 via-transparent to-brand-red/30 opacity-75 blur-2xl light:opacity-35" />
 
-      <TiltCard className="group overflow-hidden rounded-2xl border border-white/12 bg-hud-1/90 p-5 shadow-2xl backdrop-blur-2xl sm:p-6 light:bg-obsidian-1/90 light:shadow-xl">
+      <TiltCard className="group overflow-hidden rounded-2xl border border-white/12 bg-hud-1/90 p-4 shadow-2xl sm:p-6 light:bg-obsidian-1/90 light:shadow-xl">
         {/* HUD header and active chips */}
         <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 border-b border-white/8 pb-4">
           <div className="flex items-center gap-3">
@@ -29,7 +29,7 @@ export function HeroConsole() {
               <span className="font-mono text-[12px] font-bold tracking-wider text-white uppercase drop-shadow-[0_0_12px_rgba(245,12,12,0.4)]">
                 {heroConsole.title}
               </span>
-              <span className="rounded border border-red-500/30 bg-red-500/10 px-2 py-0.5 font-mono text-[9px] tracking-widest text-red-400 uppercase">
+              <span className="rounded border border-red-500/30 bg-red-500/10 px-2 py-0.5 font-mono text-[10px] tracking-widest text-red-400 uppercase">
                 {heroConsole.status}
               </span>
             </div>
@@ -44,15 +44,15 @@ export function HeroConsole() {
 
         {/* Visual centrepiece: interactive 3D WebGL neural scene */}
         {/* A dark "instrument screen" in both themes: the glow effects need a dark field. */}
-        <div data-theme="dark" className="relative my-4 flex h-[400px] w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-hud-0 transition-colors group-hover:border-blue-500/30 sm:h-[450px]">
+        <div data-theme="dark" className="relative my-4 flex h-[320px] w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-hud-0 transition-colors group-hover:border-blue-500/30 sm:h-[400px] lg:h-[450px]">
           <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute -top-12 -left-12 size-64 animate-pulse-slow rounded-full bg-red-600/25 blur-[80px]" />
-            <div className="absolute -right-12 -bottom-14 size-72 animate-pulse-slow rounded-full bg-blue-600/30 blur-[90px]" />
+            <div className="absolute -top-12 -left-12 size-64 rounded-full bg-red-600/25 blur-[80px]" />
+            <div className="absolute -right-12 -bottom-14 size-72 rounded-full bg-blue-600/30 blur-[90px]" />
             <div className="absolute top-1/2 left-1/2 size-80 -translate-1/2 rounded-full bg-indigo-500/15 blur-[100px]" />
           </div>
           <div aria-hidden className="dot-matrix pointer-events-none absolute inset-0 opacity-60" />
-          <div aria-hidden className="pointer-events-none absolute size-[360px] animate-spin-slow rounded-full border border-dashed border-blue-400/15 sm:size-[410px]" />
-          <div aria-hidden className="pointer-events-none absolute size-[290px] animate-spin-reverse rounded-full border border-red-500/20 border-y-transparent sm:size-[330px]" />
+          <div aria-hidden className="pointer-events-none absolute aspect-square h-[90%] animate-spin-slow rounded-full border border-dashed border-blue-400/15" />
+          <div aria-hidden className="pointer-events-none absolute aspect-square h-[72%] animate-spin-reverse rounded-full border border-red-500/20 border-y-transparent" />
 
           <div className="relative z-10 flex h-full w-full items-center justify-center">
             <HeroNeuralScene />
@@ -83,7 +83,7 @@ export function HeroConsole() {
                 {mesh.label}: <strong className="font-semibold text-red-400">{mesh.value}</strong>
               </span>
             </div>
-            <div className="inline-flex items-center gap-1.5 rounded border border-white/10 bg-black/75 px-2.5 py-0.5 font-mono text-[9px] text-slate-300">
+            <div className="inline-flex items-center gap-1.5 rounded border border-white/10 bg-black/75 px-2.5 py-0.5 font-mono text-[10px] text-slate-300">
               <span aria-hidden className="size-1.5 rounded-full bg-emerald-400" />
               <span>{heroConsole.telemetryTag}</span>
             </div>

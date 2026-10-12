@@ -8,9 +8,9 @@ import { SectionLink } from "./section-link";
  */
 export function FooterNav() {
   return (
-    <nav aria-label="Footer" className="flex flex-col gap-2 text-body-sm">
+    <nav aria-label="Footer" className="flex flex-col gap-0.5 text-body-sm md:gap-2">
       {MAIN_NAV.map((item) => (
-        <SectionLink key={item.href} href={item.href} className="w-fit transition-colors duration-300 hover:text-white">
+        <SectionLink key={item.href} href={item.href} className="w-fit py-1.5 transition-colors duration-300 hover:text-white md:py-0">
           {item.label}
         </SectionLink>
       ))}

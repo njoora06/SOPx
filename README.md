@@ -22,12 +22,12 @@ npm run dev          # http://localhost:3000
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Yes in production | Public origin, used for canonical URLs, the sitemap, Open Graph and structured data. Defaults to `https://www.sopxtech.com`. |
 | `GOOGLE_SHEETS_WEB_APP_URL` | Yes | Apps Script web app that stores enquiries (see below). Without it, every form submission fails. |
-| `RESEND_API_KEY` | No | Sends a notification email for each enquiry. If unset, the email is skipped and a warning is logged. |
-| `EMAIL_FROM` | No | Sender, for example `SOPX Tech <noreply@sopxtech.com>`. Must be a domain verified in Resend. |
-| `EMAIL_TO` | No | Inbox that receives notifications. Defaults to `sopxtech@gmail.com`. |
+| `SMTP_USER`, `SMTP_PASSWORD` | No | SMTP login used by Nodemailer to send a notification email for each enquiry. For Gmail, use the address and an [App Password](https://myaccount.google.com/apppasswords) (needs 2-Step Verification). If unset, the email is skipped and a warning is logged. |
+| `SMTP_HOST`, `SMTP_PORT` | No | SMTP server. Default to `smtp.gmail.com` and `587` (STARTTLS); port `465` uses TLS from the start. |
+| `CONTACT_EMAIL` | No | Inbox that receives notifications. Defaults to `sopxtech@gmail.com`. Emails are sent from `SMTP_USER`, with Reply-To set to the visitor. |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Yes in production | Upstash Redis for the form's rate limiter. Without them, the limiter falls back to per-process memory. |
 
-Server variables are validated in `src/lib/env.ts`. An empty value such as `EMAIL_TO=""` counts as unset.
+Server variables are validated in `src/lib/env.ts`. An empty value such as `CONTACT_EMAIL=""` counts as unset.
 
 Never commit `.env`. If a key is ever committed, rotate it right away.
 

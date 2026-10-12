@@ -6,6 +6,7 @@ function setup({ viewTransitions = true, reducedMotion = false, visible = true }
   const root = {
     dataset: { theme: "light" } as Record<string, string>,
     classList: { add: (c: string) => classes.add(c), remove: (c: string) => classes.delete(c) },
+    animate: vi.fn(),
   };
   const finishes: Array<() => void> = [];
   let skipPrevious: (() => void) | undefined;
@@ -25,10 +26,11 @@ function setup({ viewTransitions = true, reducedMotion = false, visible = true }
   vi.stubGlobal("document", {
     documentElement: root,
     body: { offsetWidth: 0 },
+    querySelector: () => null,
     visibilityState: visible ? "visible" : "hidden",
     ...(viewTransitions ? { startViewTransition } : {}),
   });
-  vi.stubGlobal("window", { matchMedia: (q: string) => ({ matches: q.includes("reduce") && reducedMotion }) });
+  vi.stubGlobal("window", { innerWidth: 1000, innerHeight: 800, matchMedia: (q: string) => ({ matches: q.includes("reduce") && reducedMotion }) });
   vi.stubGlobal("localStorage", { setItem: (k: string, v: string) => storage.set(k, v) });
 
   return { root, classes, startViewTransition, finishes, storage };
@@ -40,7 +42,7 @@ describe("setTheme", () => {
   beforeEach(() => vi.resetModules());
   afterEach(() => vi.unstubAllGlobals());
 
-  it("crossfades with a View Transition and cleans up afterwards", async () => {
+  it("reveals with a View Transition and cleans up afterwards", async () => {
     const env = setup();
     const { setTheme, THEME_STORAGE_KEY } = await import("./theme");
 
@@ -51,13 +53,14 @@ describe("setTheme", () => {
     expect(env.classes.has("theme-no-transitions")).toBe(true); // while the new theme is styled
     expect(env.storage.get(THEME_STORAGE_KEY)).toBe("dark");
 
-    await flush(); // ready: new theme captured
-    expect(env.classes.has("theme-no-transitions")).toBe(false);
-    expect(env.classes.has("theme-switching")).toBe(true); // crossfade still running
+    await flush(); // ready: new theme captured, reveal running
+    expect(env.root.animate).toHaveBeenCalledOnce();
+    expect(env.classes.has("theme-no-transitions")).toBe(true);
+    expect(env.classes.has("theme-switching")).toBe(true);
 
     env.finishes[0]!();
     await flush();
-    expect(env.classes.has("theme-switching")).toBe(false);
+    expect(env.classes.size).toBe(0);
   });
 
   it("keeps the class until the latest of several rapid switches finishes", async () => {

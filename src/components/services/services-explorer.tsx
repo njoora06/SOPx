@@ -44,7 +44,7 @@ export function ServicesExplorer() {
   return (
     <>
       <Reveal>
-        <div ref={tabsRef} role="tablist" aria-label="Service categories" onKeyDown={onTabKeyDown} className="scrollbar-none mb-8 flex items-center gap-2 overflow-x-auto border-b border-white/6 pb-4">
+        <div ref={tabsRef} role="tablist" aria-label="Service categories" onKeyDown={onTabKeyDown} className="scrollbar-none mb-8 flex items-center gap-2 overflow-x-auto border-b border-white/6 pb-4 max-lg:mask-r-from-85%">
           {serviceFilters.map((f) => (
             <button
               key={f.value}

@@ -17,7 +17,7 @@ export function SiteFooter() {
             <Logo />
             <p className="text-label-caps text-snow">{company.legalName}</p>
             <p className="max-w-sm text-body-sm">{company.description}</p>
-            <Button asChild variant="secondary" size="sm">
+            <Button asChild variant="secondary">
               <SectionLink href={CONSULTATION_HREF}>Get a Consultation</SectionLink>
             </Button>
           </div>

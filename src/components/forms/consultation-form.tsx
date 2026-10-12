@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { contactSchema, type ContactInput } from "@/lib/validations";
 
 const fieldClass =
-  "h-auto rounded-xl border-white/10 bg-obsidian-0 px-3.5 py-2.5 text-sm text-snow placeholder:text-slate/70 focus-visible:border-vermilion focus-visible:shadow-none focus-visible:ring-1 focus-visible:ring-vermilion/50";
+  "h-auto rounded-xl border-white/10 bg-obsidian-0 px-3.5 py-2.5 text-sm text-snow max-md:text-[16px] placeholder:text-slate/70 focus-visible:border-vermilion focus-visible:shadow-none focus-visible:ring-1 focus-visible:ring-vermilion/50";
 const SUCCESS_VISIBLE_MS = 5000;
 const labelClass = "font-mono text-[11px] font-semibold tracking-wider text-slate-300 uppercase";
 

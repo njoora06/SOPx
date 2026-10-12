@@ -24,6 +24,8 @@ function getObserver() {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         const el = entry.target as HTMLElement;
+        // Promote only for the entrance itself, not for every item waiting below the fold.
+        el.style.willChange = "transform, opacity";
         el.dataset.visible = "";
         sharedObserver?.unobserve(el);
         // Drop the compositing hint once the entrance has finished.
@@ -46,7 +48,6 @@ export function Reveal({ children, index = 0, variant = "up", as: Tag = "div", i
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    el.style.willChange = "transform, opacity";
     const observer = getObserver();
     observer.observe(el);
     return () => observer.unobserve(el);

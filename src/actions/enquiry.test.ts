@@ -73,7 +73,7 @@ describe("submitContact", () => {
   });
 
   it("still succeeds when only the email fails, since the enquiry is saved", async () => {
-    mocks.sendNotificationEmail.mockRejectedValue(new Error("resend down"));
+    mocks.sendNotificationEmail.mockRejectedValue(new Error("smtp down"));
     await expect(submitContact(valid)).resolves.toEqual({ ok: true });
   });
 });

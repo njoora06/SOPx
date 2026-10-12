@@ -136,7 +136,7 @@ export function mountNeuralBrainScene(container: HTMLElement, { reducedMotion }:
     mouseX = ((e.clientX - rect.left) / (rect.width || window.innerWidth) - 0.5) * 2;
     mouseY = ((e.clientY - rect.top) / (rect.height || window.innerHeight) - 0.5) * 2;
   };
-  window.addEventListener("mousemove", onMouseMove);
+  window.addEventListener("mousemove", onMouseMove, { passive: true });
 
   const render = () => renderer.render(scene, camera);
 

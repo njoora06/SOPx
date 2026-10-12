@@ -74,7 +74,7 @@ export function ContactSection() {
             </Reveal>
 
             <Reveal index={3}>
-              <div className="flex items-center justify-between gap-3 rounded-xl border border-white/6 bg-obsidian-2/40 p-4 font-mono text-xs text-slate">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/6 bg-obsidian-2/40 p-4 font-mono text-xs text-slate">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="size-[18px] shrink-0 text-emerald-400" aria-hidden />
                   <span>{triageNote.label}</span>
