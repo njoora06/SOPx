@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { CheckIcon } from "lucide-react"
 import { Checkbox as CheckboxPrimitive } from "radix-ui"
 
-// DESIGN.md › Components › Checkboxes & Radio Controls
+// Design system checkbox (tokens in app/globals.css).
 function Checkbox({
   className,
   ...props

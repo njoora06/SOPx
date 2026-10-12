@@ -1,24 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useScroll } from "framer-motion";
-import * as m from "framer-motion/m";
+import { useEffect, useRef } from "react";
 
-/** Thin reading-progress bar pinned to the top of the viewport. */
+/**
+ * Thin reading-progress bar pinned to the top of the viewport. Browsers with
+ * CSS scroll-driven animations run it entirely in CSS (`.scroll-progress` in
+ * globals.css); elsewhere (e.g. Firefox) this effect drives it from scroll events.
+ */
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  // Rendered after mount only: the server has no scroll position, and an
-  // unscaled bar would flash at full width before hydration.
-  const [mounted, setMounted] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount flag
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || CSS.supports("animation-timeline: scroll()")) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      el.style.transform = `scaleX(${max > 0 ? Math.min(window.scrollY / max, 1) : 0})`;
+    };
+    const onScroll = () => {
+      frame ||= requestAnimationFrame(update);
+    };
+
+    el.style.display = "block";
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   return (
-    <m.div
+    <div
+      ref={ref}
       aria-hidden
-      style={{ scaleX: scrollYProgress }}
-      className="fixed inset-x-0 top-0 z-100 h-[2.5px] origin-left bg-linear-to-r from-vermilion via-crimson to-silver shadow-[0_0_12px_rgb(239_68_68/0.8)]"
+      className="scroll-progress fixed inset-x-0 top-0 z-100 h-[2.5px] origin-left bg-linear-to-r from-vermilion via-crimson to-silver shadow-[0_0_12px_rgb(239_68_68/0.8)]"
     />
   );
 }

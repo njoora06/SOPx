@@ -15,6 +15,26 @@ export const hero = {
   ],
 } as const;
 
+/** Decorative copy in the hero's 3D console (hidden from screen readers). */
+export const heroConsole = {
+  title: "SOPX Neural AI & Robotics Core",
+  status: "Online",
+  chip: "Synaptic Mesh",
+  readouts: {
+    core: { label: "Cognitive Core", value: "Online v4.8" },
+    latency: { label: "Synaptic Latency", value: "1.2ms" },
+    mesh: { label: "Synaptic Mesh", value: "99.98% Active" },
+  },
+  telemetryTag: "NEURAL AI & ROBOTICS CORE Telemetry",
+  lobes: { left: "Left Lobe: Logic & Execution", right: "Right Lobe: Infrastructure & Defense" },
+  capacity: {
+    label: "Integrated Engineering Capacity",
+    value: "Comprehensive Lifecycle",
+    protocol: "Protocol: Tailored Architectures",
+    status: "Aligned with Verified Objectives",
+  },
+} as const;
+
 export const about = {
   eyebrow: "Who We Are",
   title: "A Committed Technology Partner for Modern Enterprises",

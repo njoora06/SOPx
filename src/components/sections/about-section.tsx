@@ -1,3 +1,4 @@
+import { Enter } from "@/components/animations/enter";
 import { Reveal } from "@/components/animations/reveal";
 import { TiltCard } from "@/components/animations/tilt-card";
 import { Container } from "@/components/layout/container";
@@ -14,26 +15,26 @@ export function AboutSection() {
       <Container>
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="space-y-4 lg:col-span-5">
-            <Reveal>
+            <Enter>
               <Eyebrow>{about.eyebrow}</Eyebrow>
-            </Reveal>
-            <Reveal index={1}>
+            </Enter>
+            <Enter index={1}>
               <h1 className="text-headline-lg">{about.title}</h1>
-            </Reveal>
-            <Reveal index={2} variant="fade">
+            </Enter>
+            <Enter index={2}>
               <div aria-hidden className="h-1 w-16 rounded-full bg-linear-to-r from-vermilion to-silver" />
-            </Reveal>
+            </Enter>
           </div>
 
           <div className="space-y-6 text-body-lg text-silver lg:col-span-7">
-            <Reveal index={1}>
+            <Enter index={1}>
               <p>
                 <strong className="font-semibold text-white">{company.legalName}</strong> {about.paragraphs[0]}
               </p>
-            </Reveal>
-            <Reveal index={2}>
+            </Enter>
+            <Enter index={2}>
               <p>{about.paragraphs[1]}</p>
-            </Reveal>
+            </Enter>
 
             <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2">
               {about.highlights.map(({ title, summary, icon: Icon, accent }, i) => (
@@ -43,7 +44,7 @@ export function AboutSection() {
                     <Icon aria-hidden className="size-5" />
                   </span>
                   <div>
-                    <h3 className="mb-1 font-sans text-title-md text-white">{title}</h3>
+                    <h2 className="mb-1 font-sans text-title-md text-white">{title}</h2>
                     <p className="text-body-md text-silver">{summary}</p>
                   </div>
                 </TiltCard>

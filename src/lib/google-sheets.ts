@@ -2,6 +2,15 @@ import "server-only";
 import { getServerEnv } from "@/lib/env";
 
 /**
+ * Sheets treats a cell starting with = + - @ (or a tab/CR) as a formula, so a
+ * submitted value like `=IMPORTXML(...)` would run in the sheet. A leading
+ * apostrophe forces plain text and is hidden in the cell.
+ */
+export function toSheetText(value: string) {
+  return /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+}
+
+/**
  * Appends one row to the Google Sheet through its Apps Script web app.
  * Sent as form-encoded fields so the script reads them from `e.parameter`;
  * each key must match a header in the sheet's first row.
@@ -10,9 +19,10 @@ export async function appendToGoogleSheet(fields: Record<string, string>) {
   const { GOOGLE_SHEETS_WEB_APP_URL: url } = getServerEnv();
   if (!url) throw new Error("GOOGLE_SHEETS_WEB_APP_URL is not set");
 
+  const safeFields = Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, toSheetText(value)]));
   const res = await fetch(url, {
     method: "POST",
-    body: new URLSearchParams(fields),
+    body: new URLSearchParams(safeFields),
     cache: "no-store",
     // Apps Script cold starts regularly take 10s+; give it room so a slow but
     // successful write isn't reported as a failure (and then resubmitted).

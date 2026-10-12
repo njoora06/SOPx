@@ -1,8 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 
 /**
- * Content models. Shaped so they can later be served from a CMS or the
- * database (Prisma) without changing the components that consume them.
+ * Content models. Shaped so they can later be served from a CMS without
+ * changing the components that consume them.
  */
 
 /** Visual emphasis of a content item: vermilion accent or silver accent. */

@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 /*
- * Design system: "Obsidian Kinetic" — source of truth is DESIGN.md.
+ * Design system: "Obsidian Kinetic". This file is its source of truth.
  * Components only use the Tailwind utilities generated from these tokens.
  *
  * Themes: <html data-theme="dark|light"> (set before paint by lib/theme.ts).
@@ -17,7 +17,7 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* ── Brand palette (DESIGN.md › Colors) ───────────────────────────── */
+  /* ── Brand palette ──────────────────────────────────────────────────── */
   --vermilion: #ef4444;        /* Primary accent — Precision Vermilion */
   --crimson: #dc2626;          /* Tertiary accent — Deep Crimson */
   --silver: #94a3b8;           /* Secondary accent — High-Contrast Silver */
@@ -33,7 +33,7 @@
   --snow: #f8fafc;
   --telemetry-normal: #22c55e; /* "green for normal telemetry" — exact hex not specified */
 
-  /* ── Generated palette (DESIGN.md front matter) ───────────────────── */
+  /* ── Generated palette ──────────────────────────────────────────────── */
   --surface: #111319;
   --surface-dim: #111319;
   --surface-bright: #373940;
@@ -206,6 +206,21 @@
   --color-amber-200: oklch(92.4% 0.12 95.746);
 }
 
+/* Hero / HUD palette: the logo's brand red and blue, and the near-black panels
+   of the hero's "instrument screen" and the HQ map. These sit in dark islands
+   (data-theme="dark") or carry explicit light: overrides, so they don't change
+   with the theme. */
+@theme {
+  --color-brand-red: #f50c0c;
+  --color-brand-red-mid: #e30b0b;
+  --color-brand-red-deep: #c70909;
+  --color-brand-blue: #0b2fa3;
+  --color-hud-0: #05070c; /* screen backdrop */
+  --color-hud-1: #0c1017; /* panels & pills */
+  --color-hud-2: #0f141f; /* buttons */
+  --color-hud-3: #151c2c; /* button hover */
+}
+
 @theme inline {
   /* Colours → bg-*, text-*, border-* */
   --color-vermilion: var(--vermilion);
@@ -288,19 +303,19 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Typefaces (DESIGN.md › Typography) — loaded by next/font in app/layout.tsx */
+  /* Typefaces — loaded by next/font in app/layout.tsx */
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Shapes (DESIGN.md › rounded): rounded-sm, rounded, rounded-md, rounded-lg, rounded-xl */
+  /* Shapes: rounded-sm, rounded, rounded-md, rounded-lg, rounded-xl */
   --radius-sm: 0.125rem;
   --radius: 0.25rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
 
-  /* Spacing (DESIGN.md › spacing) → p-space-md, gap-gutter, px-margin… */
+  /* Spacing → p-space-md, gap-gutter, px-margin… */
   --spacing-gutter: 1.5rem;
   --spacing-gutter-sm: 1rem;
   --spacing-gutter-lg: 2rem;
@@ -312,7 +327,7 @@
   --spacing-space-lg: 1.5rem;
   --spacing-space-xl: 2.5rem;
 
-  /* Elevation glows (DESIGN.md › Elevation & Depth, Components) */
+  /* Elevation glows */
   --shadow-glow-hover: var(--glow-hover);
   --shadow-glow-primary: var(--glow-primary);
   --shadow-glow-focus: var(--glow-focus);
@@ -334,11 +349,13 @@
     0%, 100% { transform: translateY(-7px) scale(1.005); }
     50% { transform: translateY(7px) scale(0.995); }
   }
+  /* Moves a full-height wrapper (so 100% = the container's height) with
+     transform, which stays on the compositor; animating `top` relaid out every frame. */
   @keyframes scan-line {
-    0% { top: 0%; opacity: 0; }
+    0% { transform: translateY(0%); opacity: 0; }
     15% { opacity: 0.85; }
     85% { opacity: 0.85; }
-    100% { top: 100%; opacity: 0; }
+    100% { transform: translateY(100%); opacity: 0; }
   }
   @keyframes orbit {
     to { transform: rotate(360deg); }
@@ -377,21 +394,22 @@
   }
 }
 
-/* ── Typography scale (DESIGN.md › typography) ───────────────────────
- * Display/headline sizes switch from their -mobile variant at 768px. */
+/* ── Typography scale ─────────────────────────────────────────────────
+ * Display/headline sizes are fluid: the mobile size at 320px, growing with
+ * the viewport to the desktop size (reached around 1000px). */
 @utility text-display-hero {
   font-family: var(--font-display);
-  font-size: 2.25rem; line-height: 2.75rem; font-weight: 700; letter-spacing: -0.02em;
-  @media (width >= 48rem) { font-size: 3.5rem; line-height: 4rem; letter-spacing: -0.03em; }
+  font-size: clamp(2.25rem, 1.68rem + 2.86vw, 3.5rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em;
+  @media (width >= 48rem) { letter-spacing: -0.03em; }
 }
 @utility text-headline-lg {
   font-family: var(--font-display);
-  font-size: 1.75rem; line-height: 2.25rem; font-weight: 600; letter-spacing: -0.02em;
-  @media (width >= 48rem) { font-size: 2.5rem; line-height: 3rem; letter-spacing: -0.025em; }
+  font-size: clamp(1.75rem, 1.36rem + 1.96vw, 2.5rem); line-height: 1.2; font-weight: 600; letter-spacing: -0.02em;
+  @media (width >= 48rem) { letter-spacing: -0.025em; }
 }
 @utility text-headline-md {
   font-family: var(--font-display);
-  font-size: 1.75rem; line-height: 2.25rem; font-weight: 600; letter-spacing: -0.02em;
+  font-size: clamp(1.5rem, 1.32rem + 0.89vw, 1.75rem); line-height: 1.3; font-weight: 600; letter-spacing: -0.02em;
 }
 @utility text-headline-sm {
   font-family: var(--font-display);
@@ -428,7 +446,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Layout grid (DESIGN.md › Layout & Spacing) ──────────────────────
+/* ── Layout grid ──────────────────────────────────────────────────────
  * Mobile <768px:      4 cols, 1rem margin, 1rem gutter
  * Tablet 768–1279px:  8 cols, 1.5rem margin, 1.5rem gutter
  * Desktop 1280px+:   12 cols, 2.5rem margin, 2rem gutter */
@@ -449,7 +467,7 @@
   }
 }
 
-/* ── Elevation layers (DESIGN.md › Elevation & Depth) ────────────────── */
+/* ── Elevation layers ────────────────────────────────────────────────── */
 @utility layer-0 {
   background-color: var(--obsidian-0);
 }
@@ -550,6 +568,11 @@
   opacity: 0;
   transform: translate3d(0, 14px, 0);
 }
+/* Decorative loops (pings, spins, scan lines) stop painting while offscreen. */
+[data-scroll-fade][data-ready]:not([data-inview]) *,
+[data-pause-offscreen][data-ready]:not([data-inview]) * {
+  animation-play-state: paused;
+}
 
 /* Hero entrance: pure CSS so it plays on first paint, before hydration.
    `backwards` fill hands control back to parallax/tilt transforms after. */
@@ -563,8 +586,37 @@
   animation: enter-up var(--dur-reveal) var(--ease-out-expo) backwards;
   animation-delay: calc(var(--enter-step, 0) * var(--stagger) + 60ms);
 }
+/* The hero's headline and lead are the LCP candidates: they only rise, never
+   fade, so the browser counts them as painted from the first frame. */
+@keyframes enter-rise {
+  from { transform: translate3d(0, 24px, 0); }
+}
+.hero-enter-text {
+  animation: enter-rise var(--dur-reveal) var(--ease-out-expo) backwards;
+  animation-delay: calc(var(--enter-step, 0) * var(--stagger) + 60ms);
+}
 .hero-enter-visual {
   animation: enter-scale 1000ms var(--ease-out-expo) 150ms backwards;
+}
+
+/* Reading-progress bar (components/animations/scroll-progress.tsx), driven by
+   scroll position in CSS. Without scroll-driven animation support it stays
+   hidden until the component's JS fallback shows and updates it. */
+.scroll-progress {
+  display: none;
+  transform: scaleX(0);
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    display: block;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes scroll-progress {
+  to { transform: scaleX(1); }
 }
 
 /* Page transitions (components/animations/page-transition.tsx). */
@@ -586,6 +638,9 @@
   animation: none;
 }
 /* The fixed header stays perfectly still across navigations. */
+.site-header {
+  view-transition-name: site-header;
+}
 ::view-transition-group(site-header) {
   animation: none;
   z-index: 100;
@@ -596,17 +651,29 @@
 ::view-transition-new(site-header) {
   animation: none;
 }
-/* Theme switch (lib/theme.ts): colours ease over briefly, then this class is removed. */
-@media (prefers-reduced-motion: no-preference) {
-  html.theme-transition,
-  html.theme-transition *,
-  html.theme-transition *::before,
-  html.theme-transition *::after {
-    transition-property: color, background-color, border-color, outline-color, fill, stroke, box-shadow, text-decoration-color !important;
-    transition-duration: 300ms !important;
-    transition-timing-function: var(--ease-in-out) !important;
-    transition-delay: 0ms !important;
-  }
+/* Theme switch (lib/theme.ts): the new theme spreads over a snapshot of the
+   old one in a growing circle (clip-path animated from lib/theme.ts); nothing
+   transitions per element. Scoped by .theme-switching because page
+   navigations keep the root still, per the rules above. The header joins the
+   root snapshot here: a separate snapshot would lose its backdrop blur. */
+html.theme-switching .site-header {
+  view-transition-name: none;
+}
+/* Both layers stay fully opaque: the old theme sits still underneath and the
+   default additive blend would otherwise brighten the overlap. */
+html.theme-switching::view-transition-old(root),
+html.theme-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+/* Set for the whole switch (lib/theme.ts): without it, every element with
+   transition-colors would ease its colours separately. The toggle's own icon
+   still animates, as instant feedback for the click. */
+html.theme-no-transitions,
+html.theme-no-transitions *:not([data-theme-icon]),
+html.theme-no-transitions *::before,
+html.theme-no-transitions *::after {
+  transition: none !important;
 }
 
 /* Clicks during a transition reach the live page. */
@@ -644,6 +711,7 @@
   }
   /* No CSS smooth scrolling: SectionLink animates section jumps itself. */
   html {
+    overflow-x: clip;
     scrollbar-color: var(--carbon) var(--obsidian-0);
   }
   ::selection {

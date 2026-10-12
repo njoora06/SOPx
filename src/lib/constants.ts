@@ -3,16 +3,11 @@ import type { NavItem } from "@/types";
 export const ROUTES = {
   home: "/",
   about: "/about",
-  services: "/services",
-  industries: "/industries",
-  whySopx: "/why-sopx-tech",
+  why: "/why-sopx",
   contact: "/contact",
-  consultation: "/get-a-consultation",
-  privacy: "/privacy-policy",
-  terms: "/terms",
 } as const;
 
-/** Section anchors (About and Contact live on their own pages). */
+/** Section anchors (About, Why SOPX Tech and Contact live on their own pages). */
 export const SECTIONS = {
   about: "about-overview",
   services: "services-matrix",
@@ -22,7 +17,7 @@ export const SECTIONS = {
 } as const;
 
 /** Sections the navbar tracks while scrolling, in page order. */
-export const SECTION_IDS = [SECTIONS.services, SECTIONS.industries, SECTIONS.why] as const;
+export const SECTION_IDS = [SECTIONS.services, SECTIONS.industries] as const;
 
 /**
  * Nav href to highlight: the route itself on standalone pages, otherwise the
@@ -37,15 +32,13 @@ export const MAIN_NAV: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Services", href: `/#${SECTIONS.services}` },
   { label: "Industries", href: `/#${SECTIONS.industries}` },
-  { label: "Why SOPX Tech", href: `/#${SECTIONS.why}` },
+  { label: "Why SOPX Tech", href: ROUTES.why },
   { label: "About", href: ROUTES.about },
   { label: "Contact", href: ROUTES.contact },
 ];
 
-export const LEGAL_NAV: NavItem[] = [
-  { label: "Privacy Policy", href: ROUTES.privacy },
-  { label: "Terms & Conditions", href: ROUTES.terms },
-];
+/** Footer legal links. Add Privacy Policy and Terms here once those pages exist. */
+export const LEGAL_NAV: NavItem[] = [];
 
 /** "Get a Consultation" buttons open the contact page with the consultation form. */
 export const CONSULTATION_HREF = ROUTES.contact;

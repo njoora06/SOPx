@@ -13,14 +13,6 @@ import {
 } from "lucide-react";
 import type { Service, ServiceCategory } from "@/types";
 
-export const serviceFilters: { label: string; value: ServiceCategory | "all" }[] = [
-  { label: "All 11 Capabilities", value: "all" },
-  { label: "Software & AI", value: "software-ai" },
-  { label: "Cloud & Infrastructure", value: "cloud-infrastructure" },
-  { label: "Cybersecurity & Support", value: "security-support" },
-  { label: "Transformation & Consulting", value: "transformation-consulting" },
-];
-
 export const services: Service[] = [
   {
     number: "01",
@@ -144,6 +136,14 @@ export const services: Service[] = [
     capabilities: ["Process digitization & automated routing", "Enterprise tech stack modernization"],
     wide: true,
   },
+];
+
+export const serviceFilters: { label: string; value: ServiceCategory | "all" }[] = [
+  { label: `All ${services.length} Capabilities`, value: "all" },
+  { label: "Software & AI", value: "software-ai" },
+  { label: "Cloud & Infrastructure", value: "cloud-infrastructure" },
+  { label: "Cybersecurity & Support", value: "security-support" },
+  { label: "Transformation & Consulting", value: "transformation-consulting" },
 ];
 
 /** Short service names listed in the footer. */

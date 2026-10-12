@@ -20,7 +20,7 @@ export const accentStyles: Record<
 };
 
 /**
- * DESIGN.md › Elevation: Layer-1 surface whose hover lifts to the Layer-2
+ * Elevation: Layer-1 surface whose hover lifts to the Layer-2
  * interactive state (vermilion edge at 40% with a crimson edge glow).
  */
 export const interactiveCard =

@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { Slot } from "radix-ui"
 
-// DESIGN.md › Components › Buttons
+// Design system buttons (tokens in app/globals.css).
 const buttonVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-2 rounded text-title-md whitespace-nowrap transition-all outline-none focus-visible:shadow-glow-focus disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -21,7 +21,8 @@ const buttonVariants = cva(
         default: "h-10 px-4",
         sm: "h-8 px-3",
         lg: "h-12 px-6",
-        icon: "size-10",
+        // 44px touch target on phones.
+        icon: "size-11 md:size-10",
       },
     },
     defaultVariants: {
