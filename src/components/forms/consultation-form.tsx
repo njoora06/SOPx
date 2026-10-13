@@ -1,9 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, BadgeCheck, Lock } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Lock } from "lucide-react";
+import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { submitContact } from "@/actions/enquiry";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,6 @@ import { contactSchema, type ContactInput } from "@/lib/validations";
 
 const fieldClass =
   "h-auto rounded-xl border-white/10 bg-obsidian-0 px-3.5 py-2.5 text-sm text-snow max-md:text-[16px] placeholder:text-slate/70 focus-visible:border-vermilion focus-visible:shadow-none focus-visible:ring-1 focus-visible:ring-vermilion/50";
-const SUCCESS_VISIBLE_MS = 5000;
 const labelClass = "font-mono text-[11px] font-semibold tracking-wider text-slate-300 uppercase";
 
 const defaultValues: ContactInput = {
@@ -70,8 +70,9 @@ function TextField({ name, label, hint, error, children }: TextFieldProps) {
   );
 }
 
+const FALLBACK_ERROR = "Something went wrong. Please try again or email us directly.";
+
 export function ConsultationForm() {
-  const [status, setStatus] = useState<{ ok: boolean; error?: string } | null>(null);
   const {
     register,
     control,
@@ -80,25 +81,23 @@ export function ConsultationForm() {
     formState: { errors, isSubmitting },
   } = useForm<ContactInput>({ resolver: zodResolver(contactSchema), defaultValues });
 
-  // The success banner shows for exactly 5 seconds, then is removed.
-  useEffect(() => {
-    if (!status?.ok) return;
-    const timer = setTimeout(() => setStatus(null), SUCCESS_VISIBLE_MS);
-    return () => clearTimeout(timer);
-  }, [status]);
-
+  // Toasts (see components/ui/toaster.tsx) close after 5 seconds. Success only once the server confirms.
   const submit = handleSubmit(async (values) => {
-    setStatus(null);
     try {
       const result = await submitContact(values);
       if (result.ok) {
         reset(defaultValues);
-        setStatus({ ok: true });
+        toast.success(
+          <div className="text-sm leading-snug">
+            <p className="font-semibold">{copy.success.title}</p>
+            <p className="text-xs opacity-90">{copy.success.text}</p>
+          </div>,
+        );
       } else {
-        setStatus({ ok: false, error: result.error });
+        toast.error(result.error);
       }
     } catch {
-      setStatus({ ok: false, error: "Something went wrong. Please try again or email us directly." });
+      toast.error(FALLBACK_ERROR);
     }
   });
 
@@ -223,21 +222,6 @@ export function ConsultationForm() {
         <span>{copy.submit}</span>
         <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-1" aria-hidden />
       </button>
-
-      <div aria-live="polite">
-        {status?.ok && (
-          <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-950/70 p-4 text-xs text-emerald-200 sm:text-sm">
-            <BadgeCheck className="size-[22px] shrink-0 text-emerald-400" aria-hidden />
-            <div>
-              <p className="font-semibold text-white">{copy.success.title}</p>
-              <p className="mt-0.5 text-xs text-emerald-300/90">{copy.success.text}</p>
-            </div>
-          </div>
-        )}
-        {status && !status.ok && (
-          <p className="rounded-xl border border-vermilion/30 bg-vermilion/10 p-4 text-xs text-red-200 sm:text-sm">{status.error}</p>
-        )}
-      </div>
     </form>
   );
 }

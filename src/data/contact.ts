@@ -42,10 +42,10 @@ export const consultationForm = {
     title: "Bilateral Enterprise NDA Requested:",
     text: "SOPX Tech will execute a non-disclosure agreement prior to stack analysis and proprietary source auditing.",
   },
-  submit: "Initiate Consultation & Dispatch Request",
+  submit: "Send Request",
   success: {
-    title: "Consultation Brief Received Successfully.",
-    text: "Your brief has been routed to our Lead Architecture Team. Expect triage feedback within 4 business hours.",
+    title: "Request Sent Successfully!",
+    text: "Our team will contact you shortly.",
   },
 } as const;
 

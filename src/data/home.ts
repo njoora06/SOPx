@@ -39,7 +39,7 @@ export const about = {
   eyebrow: "Who We Are",
   title: "A Committed Technology Partner for Modern Enterprises",
   paragraphs: [
-    "is a dedicated enterprise technology company delivering comprehensive end-to-end solutions. We operate on the foundational belief that technology must serve clear business objectives rather than abstract complexity.",
+    "(also known as SOPX Technologies) is a dedicated enterprise technology company delivering comprehensive end-to-end solutions, from custom software and AI development to cloud, networking, cybersecurity and IT infrastructure. We operate on the foundational belief that technology must serve clear business objectives rather than abstract complexity.",
     "From single-system upgrades to sweeping digital modernization, we provide organizations with structural engineering rigor, reliable execution, and a committed long-term partnership designed to sustain continuous technological evolution.",
   ],
   highlights: [

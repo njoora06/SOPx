@@ -25,7 +25,7 @@ export function VisionMissionSection() {
                     <Icon aria-hidden className="size-5" />
                     {label}
                   </p>
-                  <h3 className="text-headline-md">{title}</h3>
+                  <h2 className="text-headline-md">{title}</h2>
                   <p className="text-body-lg text-silver">{summary}</p>
                 </div>
                 <p className="mt-6 border-t border-white/6 pt-6 text-code-badge text-slate">{meta}</p>

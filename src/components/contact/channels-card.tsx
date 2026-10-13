@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { Building2, Clock, MailCheck, Phone, PhoneCall } from "lucide-react";
+import { SocialLinks } from "@/components/navigation/social-links";
 import { CopyEmailButton } from "@/components/sections/copy-email-button";
 import { contactChannels } from "@/data/contact";
 import { cn } from "@/lib/utils";
@@ -93,6 +94,11 @@ export function ChannelsCard() {
             </span>
           </div>
           <span className="shrink-0 rounded border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-400">{hours.tag}</span>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/6 bg-obsidian-2/40 p-3">
+          <span className="font-mono text-[10px] tracking-wider text-slate uppercase">Follow us</span>
+          <SocialLinks />
         </div>
       </div>
     </InfoCard>

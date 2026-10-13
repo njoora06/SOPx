@@ -31,7 +31,7 @@ export function WhySection() {
                 <span className={cn("block w-fit rounded border px-2.5 py-1 text-code-badge font-bold tabular", accentStyles[accent].tile)}>
                   {number}
                 </span>
-                <h3 className="text-headline-sm">{title}</h3>
+                <h2 className="text-headline-sm">{title}</h2>
                 <p className="text-body-md text-silver">{summary}</p>
               </TiltCard>
             </Reveal>

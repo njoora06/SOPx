@@ -6,9 +6,10 @@ import { AmbientMesh } from "@/components/layout/ambient-mesh";
 import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { JsonLd } from "@/components/seo/json-ld";
 import { company } from "@/data/company";
-import { contactChannels } from "@/data/contact";
 import { sharedOpenGraph } from "@/lib/seo";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/structured-data";
 import { DEFAULT_THEME, THEME_COLORS, themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -20,39 +21,21 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   metadataBase: new URL(company.url),
   title: {
-    default: `${company.legalName} — Enterprise Engineering & Technology Architecture`,
+    default: `${company.name} — AI Development & IT Services Company in India`,
     template: `%s | ${company.name}`,
   },
-  description: company.description,
+  description: company.metaDescription,
   applicationName: company.name,
   authors: [{ name: company.legalName }],
-  alternates: { canonical: "/" },
-  openGraph: { ...sharedOpenGraph, url: "/" },
+  publisher: company.legalName,
+  // Canonical URLs are set per page (lib/seo.ts) so a new page never inherits the homepage's.
+  openGraph: { ...sharedOpenGraph, title: company.name, description: company.metaDescription },
   twitter: { card: "summary_large_image" },
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
 };
 
 // Lets content reach under the notch / home indicator; the bottom bar pads itself with safe-area insets.
 export const viewport: Viewport = { viewportFit: "cover" };
-
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: company.legalName,
-  url: company.url,
-  logo: new URL("/logo/sopx-logo-light.png", company.url).toString(),
-  email: company.email,
-  telephone: contactChannels.phone.href.replace("tel:", ""),
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Lajpat Nagar, Near Kanhaiya Talkies",
-    addressLocality: "Padrauna",
-    addressRegion: "Uttar Pradesh",
-    postalCode: "274304",
-    addressCountry: "IN",
-  },
-  sameAs: company.socials.map((s) => s.href),
-};
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -65,10 +48,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js');${themeInitScript}` }} />
       </head>
       <body className="relative overflow-x-clip pb-[calc(4.5rem+1px+env(safe-area-inset-bottom))] md:pb-0">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+        <JsonLd data={organizationJsonLd} />
+        <JsonLd data={websiteJsonLd} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-60 focus:rounded focus:bg-vermilion focus:px-4 focus:py-2 focus:text-primary-foreground"
