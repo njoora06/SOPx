@@ -1,13 +1,14 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TiltCard } from "@/components/animations/tilt-card";
 import { SectionLink } from "@/components/navigation/section-link";
 import { accentStyles, interactiveCard } from "@/lib/accent";
-import { CONSULTATION_HREF } from "@/lib/constants";
+import { CONSULTATION_HREF, serviceHref } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/types";
 
 export function ServiceCard({ service }: { service: Service }) {
-  const { number, title, summary, tag, icon: Icon, accent, capabilities, wide } = service;
+  const { slug, number, title, summary, tag, icon: Icon, accent, capabilities, wide } = service;
   const styles = accentStyles[accent];
 
   return (
@@ -28,7 +29,11 @@ export function ServiceCard({ service }: { service: Service }) {
           </span>
           <span className={cn("rounded border px-2 py-0.5 text-label-caps", styles.chip)}>{tag}</span>
         </div>
-        <h3 className="text-headline-sm transition-colors group-hover:text-snow">{title}</h3>
+        <h3 className="text-headline-sm transition-colors group-hover:text-snow">
+          <Link href={serviceHref(slug)} className="rounded outline-none focus-visible:shadow-glow-focus">
+            {title}
+          </Link>
+        </h3>
         <p className="text-body-md text-silver">{summary}</p>
         <ul className={cn("space-y-2 pt-2 text-body-sm text-snow", wide && "sm:flex sm:gap-6 sm:space-y-0")}>
           {capabilities.map((c) => (

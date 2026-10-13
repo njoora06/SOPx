@@ -726,3 +726,20 @@ html.theme-no-transitions *::after {
     }
   }
 }
+
+/* React Toastify (contact form). Its stylesheet sets these on :root at runtime;
+   setting them on its wrapper wins by inheritance and follows the site theme. */
+.Toastify {
+  --toastify-color-dark: var(--obsidian-2);
+  --toastify-text-color-dark: var(--snow);
+  --toastify-color-success: var(--telemetry-normal);
+  --toastify-color-error: var(--vermilion);
+  --toastify-color-progress-dark: var(--vermilion);
+  --toastify-font-family: var(--font-sans);
+  --toastify-toast-bd-radius: 0.75rem;
+  --toastify-toast-min-height: 0;
+  --toastify-toast-padding: 10px 12px;
+  --toastify-toast-shadow: 0 0 0 1px var(--slate-border), 0 12px 32px -12px rgb(0 0 0 / 0.5);
+  /* Clear the fixed 80px header (pt-20 on <main>). */
+  --toastify-toast-top: calc(5rem + max(var(--toastify-toast-offset), env(safe-area-inset-top)));
+}

@@ -2,10 +2,11 @@ import Link from "next/link";
 import { FooterNav } from "@/components/navigation/footer-nav";
 import { Logo } from "@/components/navigation/logo";
 import { SectionLink } from "@/components/navigation/section-link";
+import { SocialLinks } from "@/components/navigation/social-links";
 import { Button } from "@/components/ui/button";
 import { company } from "@/data/company";
 import { footerServices } from "@/data/services";
-import { CONSULTATION_HREF, LEGAL_NAV } from "@/lib/constants";
+import { CONSULTATION_HREF, LEGAL_NAV, serviceHref } from "@/lib/constants";
 import { Container } from "./container";
 
 export function SiteFooter() {
@@ -20,13 +21,18 @@ export function SiteFooter() {
             <Button asChild variant="secondary">
               <SectionLink href={CONSULTATION_HREF}>Get a Consultation</SectionLink>
             </Button>
+            <SocialLinks />
           </div>
 
           <div className="space-y-4 lg:col-span-5">
             <h2 className="text-label-caps text-white">Main Services</h2>
             <ul className="grid grid-cols-1 gap-x-4 gap-y-2 text-body-sm sm:grid-cols-2">
               {footerServices.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s.slug}>
+                  <Link href={serviceHref(s.slug)} className="transition-colors duration-300 hover:text-white">
+                    {s.label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>

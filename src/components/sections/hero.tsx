@@ -51,6 +51,7 @@ export function Hero() {
             </div>
 
             <h1 style={{ "--enter-step": 1 } as React.CSSProperties} className="hero-enter-text text-[2rem] leading-[1.12] break-words min-[400px]:text-4xl font-extrabold tracking-[-0.035em] text-white sm:text-5xl lg:text-[54px]">
+              <span className="sr-only">{company.name}: </span>
               {hero.titleStart}{" "}
               <Highlight tone="blue">{hero.highlightA}</Highlight>,{" "}
               <Highlight tone="red">{hero.highlightB}</Highlight>, {hero.titleEnd}

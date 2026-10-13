@@ -5,7 +5,11 @@ export const ROUTES = {
   about: "/about",
   why: "/why-sopx",
   contact: "/contact",
+  services: "/services",
 } as const;
+
+/** Path of a service's own page. */
+export const serviceHref = (slug: string) => `${ROUTES.services}/${slug}`;
 
 /** Section anchors (About, Why SOPX Tech and Contact live on their own pages). */
 export const SECTIONS = {
